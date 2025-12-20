@@ -76,7 +76,7 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
       
       {/* Mensaje de estado */}
       {message && (
-        <div className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${
+        <div className={`mb-6 p-4 rounded-lg flex items-start gap-3 animate-slideDown cursor-pointer ${
           message.type === 'success' ? 'bg-green-50 text-green-800' :
           message.type === 'warning' ? 'bg-yellow-50 text-yellow-800' :
           'bg-red-50 text-red-800'
@@ -103,7 +103,6 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
             onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
             placeholder="Ej: María González"
-            required
           />
         </div>
 
@@ -117,7 +116,6 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
             value={event}
             onChange={(e) => setEvent(e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
-            required
           >
             <option value="">Selecciona un tipo</option>
             <option value="Boda">Boda</option>
@@ -171,7 +169,6 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
             maxLength={500}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all resize-none"
             placeholder="Cuéntanos sobre tu experiencia con nuestros productos... (mín. 10 caracteres)"
-            required
           />
           <p className="text-sm text-gray-500 mt-1">
             {comment.length}/500 caracteres {comment.length < 10 && `(mínimo 10)`}
@@ -182,7 +179,7 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <Send className="w-5 h-5" />
           {isSubmitting ? 'Enviando...' : 'Enviar Reseña'}

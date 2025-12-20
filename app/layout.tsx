@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { generateSEOMetadata } from "@/lib/seo";
 import { generateLocalBusinessSchema } from "@/lib/schema";
+import { DynamicTitle } from "@/components/DynamicTitle";
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -14,7 +15,10 @@ const playfair = Playfair_Display({
   variable: "--font-playfair"
 });
 
-export const metadata: Metadata = generateSEOMetadata({});
+export const metadata: Metadata = {
+  ...generateSEOMetadata({}),
+  title: 'Dulce Hogar',
+};
 
 export default function RootLayout({
   children,
@@ -32,6 +36,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
+        <DynamicTitle />
         {children}
       </body>
     </html>

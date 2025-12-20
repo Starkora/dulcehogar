@@ -276,7 +276,9 @@ export default function ContactPage() {
                     Facebook
                   </a>
                   <a
-                    href="#"
+                    href="https://api.whatsapp.com/send/?phone=51904065007&text=¡Hola!%20Me%20gustaría%20hacer%20un%20pedido%20de%20Dulce%20Hogar&type=phone_number&app_absent=0"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex-1 bg-green-100 hover:bg-green-200 text-green-600 py-3 rounded-xl font-semibold text-center transition-colors flex items-center justify-center gap-2"
                   >
                     <MessageCircle className="w-5 h-5" />
