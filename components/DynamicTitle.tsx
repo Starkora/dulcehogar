@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 export function DynamicTitle() {
   useEffect(() => {
     const originalTitle = document.title;
-    const awayMessage = '🎂 ¡No te vayas! - Dulce Hogar';
+    const awayMessage = '¡No te vayas! - Dulce Hogar';
 
     const handleVisibilityChange = () => {
       if (document.hidden) {

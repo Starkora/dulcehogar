@@ -2,7 +2,7 @@
 
 Una moderna página web para repostería construida con Next.js 16, TypeScript y Tailwind CSS.
 
-## 🍰 Características
+## Características
 
 - **Landing Page Atractiva**: Hero section con llamados a la acción claros
 - **Catálogo de Productos**: Muestra tortas, cupcakes, galletas y más postres
@@ -23,7 +23,7 @@ Una moderna página web para repostería construida con Next.js 16, TypeScript y
 - **SEO Optimizado**: Meta tags, Open Graph y Schema.org markup
 - **Iconos Profesionales**: Lucide React en lugar de emojis
 
-## 🚀 Tecnologías
+## Tecnologías
 
 - **Framework**: Next.js 16.1.0 con App Router
 - **Lenguaje**: TypeScript
@@ -33,7 +33,7 @@ Una moderna página web para repostería construida con Next.js 16, TypeScript y
 - **Build Tool**: Turbopack
 - **Almacenamiento**: localStorage para reseñas de usuarios
 
-## 📦 Instalación
+## Instalación
 
 ```bash
 # Instalar dependencias
@@ -76,7 +76,7 @@ dulcehogar/
     └── images/            # Imágenes de productos
 ```
 
-## 🌐 Páginas
+## Páginas
 
 - **/** - Página de inicio con hero, servicios y productos destacados
 - **/productos** - Catálogo completo de productos con filtros
@@ -84,7 +84,7 @@ dulcehogar/
 - **/contacto** - Formulario de contacto e información
 - **/admin/reviews** - Panel de administración para moderar reseñas (contraseña: `dulcehogar2024`)
 
-## 🎯 Personalización
+## Personalización
 
 ### WhatsApp
 Actualiza el número de WhatsApp en:
@@ -130,7 +130,7 @@ Actualiza la información en:
 - `components/Footer.tsx`
 - `app/contacto/page.tsx`
 
-## 📱 Características de Diseño
+## Características de Diseño
 
 - Gradientes suaves (rosa a naranja)
 - Tarjetas con sombras y hover effects
@@ -149,7 +149,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ---
 
-Hecho con ❤️ para endulzar el mundo
+Hecho con amor para endulzar el mundo
 
 ## Deploy on Vercel
 

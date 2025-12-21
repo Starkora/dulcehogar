@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Instagram, Heart, MessageCircle, ExternalLink } from 'lucide-react';
+import { Instagram, Heart, MessageCircle, ExternalLink, Cake, Sparkles, Smartphone } from 'lucide-react';
 
 // Simulación de posts de Instagram (en producción usarías Instagram Basic Display API)
 const instagramPosts = [
@@ -10,42 +10,42 @@ const instagramPosts = [
     image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop',
     likes: 234,
     comments: 12,
-    caption: '🎂 Torta de chocolate con fresas frescas para un cumpleaños muy especial...',
+    caption: 'Torta de chocolate con fresas frescas para un cumpleaños muy especial...',
   },
   {
     id: 2,
     image: 'https://images.unsplash.com/photo-1588195538326-c5acd4cbbe01?w=400&h=400&fit=crop',
     likes: 189,
     comments: 8,
-    caption: '🧁 Cupcakes personalizados para baby shower. ¡Dulzura en cada bocado!',
+    caption: 'Cupcakes personalizados para baby shower. ¡Dulzura en cada bocado!',
   },
   {
     id: 3,
     image: 'https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=400&h=400&fit=crop',
     likes: 312,
     comments: 15,
-    caption: '💍 Torta de bodas elegante con detalles en oro comestible',
+    caption: 'Torta de bodas elegante con detalles en oro comestible',
   },
   {
     id: 4,
     image: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=400&h=400&fit=crop',
     likes: 156,
     comments: 6,
-    caption: '🍪 Galletas decoradas para Primera Comunión. Diseños únicos y deliciosos',
+    caption: 'Galletas decoradas para Primera Comunión. Diseños únicos y deliciosos',
   },
   {
     id: 5,
     image: 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=400&h=400&fit=crop',
     likes: 278,
     comments: 11,
-    caption: '🎨 Red Velvet con decoración artística. ¡Arte comestible!',
+    caption: 'Red Velvet con decoración artística. ¡Arte comestible!',
   },
   {
     id: 6,
     image: 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=400&h=400&fit=crop',
     likes: 201,
     comments: 9,
-    caption: '✨ Mini tartas personalizadas para eventos corporativos',
+    caption: 'Mini tartas personalizadas para eventos corporativos',
   },
 ];
 
@@ -163,11 +163,20 @@ export function InstagramEmbed() {
         </a>
       </div>
 
-      <p className="text-gray-700 mb-4">
-        🎂 Repostería artesanal en Bogotá<br />
-        ✨ Tortas, cupcakes y galletas personalizadas<br />
-        📱 Pedidos por WhatsApp
-      </p>
+      <div className="text-gray-700 mb-4 space-y-2">
+        <div className="flex items-center gap-2">
+          <Cake className="w-4 h-4 text-pink-500 flex-shrink-0" />
+          <span>Repostería artesanal en Bogotá</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-pink-500 flex-shrink-0" />
+          <span>Tortas, cupcakes y galletas personalizadas</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Smartphone className="w-4 h-4 text-pink-500 flex-shrink-0" />
+          <span>Pedidos por WhatsApp</span>
+        </div>
+      </div>
 
       <div className="grid grid-cols-3 gap-1 mb-4">
         {instagramPosts.slice(0, 9).map((post) => (

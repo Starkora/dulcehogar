@@ -1,6 +1,6 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { HelpCircle, Truck, CreditCard, XCircle, Clock, Shield, ChefHat, MessageCircle } from 'lucide-react';
+import { HelpCircle, Truck, CreditCard, XCircle, Clock, Shield, ChefHat, MessageCircle, Check } from 'lucide-react';
 
 export const metadata = {
   title: 'Preguntas Frecuentes y Políticas - Dulce Hogar',
@@ -160,7 +160,7 @@ export default function FAQPage() {
                   <ul className="space-y-3">
                     {policy.items.map((item, idx) => (
                       <li key={idx} className="flex items-start">
-                        <span className="text-pink-500 mr-2 flex-shrink-0">✓</span>
+                        <Check className="text-pink-500 mr-2 flex-shrink-0 w-5 h-5 mt-0.5" />
                         <span className="text-gray-700">{item}</span>
                       </li>
                     ))}

@@ -1,29 +1,29 @@
 # Sistema de Moderación de Reseñas - Dulce Hogar
 
-## 🛡️ Protección contra Spam y Contenido Malicioso
+## Protección contra Spam y Contenido Malicioso
 
 Este sistema implementa múltiples capas de protección para mantener la calidad y autenticidad de las reseñas.
 
 ## Validaciones Automáticas
 
 ### 1. **Validación de Formato**
-- ✅ Nombre: mínimo 2 caracteres, máximo 50
-- ✅ Comentario: mínimo 10 caracteres, máximo 500
-- ✅ Calificación: debe estar entre 1 y 5 estrellas
-- ✅ Evento: debe seleccionarse de la lista predefinida
+- Nombre: mínimo 2 caracteres, máximo 50
+- Comentario: mínimo 10 caracteres, máximo 500
+- Calificación: debe estar entre 1 y 5 estrellas
+- Evento: debe seleccionarse de la lista predefinida
 
 ### 2. **Detección de Spam**
 El sistema detecta automáticamente:
-- 🚫 URLs o enlaces (http://, www., etc.)
-- 🚫 Información de contacto (teléfonos, emails)
-- 🚫 Palabras prohibidas o inapropiadas
-- 🚫 Contenido repetitivo (menos de 30% palabras únicas)
-- 🚫 Comentarios muy genéricos o cortos
+- URLs o enlaces (http://, www., etc.)
+- Información de contacto (teléfonos, emails)
+- Palabras prohibidas o inapropiadas
+- Contenido repetitivo (menos de 30% palabras únicas)
+- Comentarios muy genéricos o cortos
 
 ### 3. **Rate Limiting**
-- ⏱️ Máximo 2 reseñas por hora por usuario
-- 🔍 Usa fingerprinting del navegador (no IP real)
-- 🛑 Bloquea intentos de spam masivo
+- Máximo 2 reseñas por hora por usuario
+- Usa fingerprinting del navegador (no IP real)
+- Bloquea intentos de spam masivo
 
 ### 4. **Moderación Inteligente**
 **Aprobación Automática:**
@@ -47,13 +47,13 @@ El sistema detecta automáticamente:
 ### Funcionalidades
 
 #### Vista de Pendientes
-- 📋 Lista todas las reseñas que requieren aprobación
-- ✅ Botón "Aprobar" - Publica la reseña inmediatamente
-- ❌ Botón "Rechazar" - Rechaza la reseña (no se publica)
+- Lista todas las reseñas que requieren aprobación
+- Botón "Aprobar" - Publica la reseña inmediatamente
+- Botón "Rechazar" - Rechaza la reseña (no se publica)
 
 #### Vista de Aprobadas
-- 📋 Lista todas las reseñas publicadas
-- 🗑️ Botón "Eliminar" - Elimina permanentemente una reseña
+- Lista todas las reseñas publicadas
+- Botón "Eliminar" - Elimina permanentemente una reseña
 
 ### Información de Cada Reseña
 - Nombre del usuario
@@ -69,10 +69,10 @@ El sistema detecta automáticamente:
 ```
 Usuario envía reseña
         ↓
-Validación de formato ──→ ❌ Error → Mensaje al usuario
-        ↓ ✅
-Rate Limiting check ──→ ❌ Límite excedido → Mensaje de espera
-        ↓ ✅
+Validación de formato ──→ [X] Error → Mensaje al usuario
+        ↓ [OK]
+Rate Limiting check ──→ [X] Límite excedido → Mensaje de espera
+        ↓ [OK]
 Validación de contenido
         ↓
     ┌───┴───┐
