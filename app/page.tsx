@@ -64,7 +64,6 @@ export default function Home() {
         {/* Hero Section */}
         {config.showHero && (
         <section className="relative h-[600px] flex items-center justify-center bg-gradient-to-br from-pink-50 to-orange-50">
-          <div className="absolute inset-0 bg-[url('/images/bakery-pattern.png')] opacity-10"></div>
           <div className="relative z-10 text-center px-4">
             <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6">
               Dulce Hogar
@@ -189,7 +188,6 @@ export default function Home() {
                 </div>
               ) : (
                 <div key={promo.id} className="bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-2xl shadow-2xl p-8 text-white text-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('/images/confetti.png')] opacity-10"></div>
                   <div className="relative z-10">
                     <h3 className="text-4xl font-bold mb-4">{promo.title}</h3>
                     <p className="text-lg mb-6">

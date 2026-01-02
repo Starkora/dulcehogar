@@ -29,13 +29,11 @@ export default function RootLayout({
 
   return (
     <html lang="es">
-      <head>
+      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
-      </head>
-      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         <DynamicTitle />
         {children}
       </body>
