@@ -7,14 +7,20 @@ import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { getProducts } from '@/lib/siteConfig';
 import { useState, useEffect } from 'react';
 
-const categories = ['Todos', 'Tortas', 'Cupcakes', 'Galletas', 'Postres'];
-
 export default function ProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [categories, setCategories] = useState<string[]>(['Todos']);
 
   useEffect(() => {
-    setProducts(getProducts());
+    const loadedProducts = getProducts();
+    setProducts(loadedProducts);
+    
+    // Extraer categorías únicas de los productos
+    const uniqueCategories = Array.from(
+      new Set(loadedProducts.map(p => p.category).filter(Boolean))
+    ) as string[];
+    setCategories(['Todos', ...uniqueCategories.sort()]);
   }, []);
 
   const filteredProducts = selectedCategory === 'Todos'

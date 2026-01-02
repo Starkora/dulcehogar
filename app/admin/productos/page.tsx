@@ -14,6 +14,9 @@ export default function AdminProductos() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
+  const [newCategory, setNewCategory] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -26,7 +29,15 @@ export default function AdminProductos() {
     if (!isAuthenticated()) {
       router.push('/admin/login');
     } else {
-      setProducts(getProducts());
+      const loadedProducts = getProducts();
+      setProducts(loadedProducts);
+      
+      // Extraer categorías únicas
+      const uniqueCategories = Array.from(
+        new Set(loadedProducts.map(p => p.category).filter(Boolean))
+      ) as string[];
+      setCategories(uniqueCategories.sort());
+      
       setIsLoading(false);
     }
   }, [router]);
@@ -45,13 +56,28 @@ export default function AdminProductos() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Si hay nueva categoría, usarla
+    const finalCategory = showNewCategoryInput && newCategory.trim() 
+      ? newCategory.trim() 
+      : formData.category;
+    
+    const productData = { ...formData, category: finalCategory };
+    
     if (editingProduct) {
-      updateProduct(editingProduct.id, formData);
+      updateProduct(editingProduct.id, productData);
     } else {
-      addProduct(formData);
+      addProduct(productData);
     }
     
-    setProducts(getProducts());
+    const loadedProducts = getProducts();
+    setProducts(loadedProducts);
+    
+    // Actualizar categorías
+    const uniqueCategories = Array.from(
+      new Set(loadedProducts.map(p => p.category).filter(Boolean))
+    ) as string[];
+    setCategories(uniqueCategories.sort());
+    
     resetForm();
   };
 
@@ -78,6 +104,8 @@ export default function AdminProductos() {
     setFormData({ name: '', description: '', price: 0, image: '', category: '' });
     setEditingProduct(null);
     setIsEditing(false);
+    setShowNewCategoryInput(false);
+    setNewCategory('');
   };
 
   return (
@@ -136,13 +164,49 @@ export default function AdminProductos() {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Categoría
                 </label>
-                <input
-                  type="text"
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  placeholder="Ej: Tortas, Cupcakes, Galletas"
-                />
+                {!showNewCategoryInput ? (
+                  <div className="flex gap-2">
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    >
+                      <option value="">Seleccionar categoría</option>
+                      {categories.map((cat) => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => setShowNewCategoryInput(true)}
+                      className="px-4 py-3 bg-pink-100 hover:bg-pink-200 text-pink-600 rounded-lg font-semibold transition-all whitespace-nowrap"
+                    >
+                      + Nueva
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      placeholder="Nombre de la nueva categoría"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowNewCategoryInput(false);
+                        setNewCategory('');
+                      }}
+                      className="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg font-semibold transition-all"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
