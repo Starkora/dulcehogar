@@ -16,12 +16,12 @@ const faqs = [
   {
     icon: Truck,
     question: '¿Hacen entregas? ¿Cuál es el costo?',
-    answer: 'Sí, realizamos entregas en Bogotá y municipios cercanos. El costo de envío varía según la distancia: dentro de Bogotá $15.000-$25.000. Envíos gratuitos en pedidos superiores a $200.000. También puedes recoger tu pedido en nuestro local sin costo adicional.'
+    answer: 'Sí, realizamos entregas en Lima, especialmente en VMT (Villa María del Triunfo) y distritos aledános. El costo de envío varía según la distancia: dentro de VMT S/ 5-10, distritos cercanos S/ 10-20. Envíos gratuitos en pedidos superiores a S/ 150. También puedes recoger tu pedido en nuestro local sin costo adicional.'
   },
   {
     icon: CreditCard,
     question: '¿Qué formas de pago aceptan?',
-    answer: 'Aceptamos múltiples formas de pago: Efectivo, transferencia bancaria (Bancolombia, Nequi, Daviplata), tarjetas de crédito/débito, y pago contraentrega (aplican condiciones). Requerimos un anticipo del 50% para confirmar tu pedido.'
+    answer: 'Aceptamos múltiples formas de pago: Efectivo, Yape, Plin, transferencia bancaria (BCP, Interbank, BBVA, Scotiabank), tarjetas de crédito/débito, y pago contraentrega (aplican condiciones). Requerimos un anticipo del 50% para confirmar tu pedido.'
   },
   {
     icon: XCircle,
