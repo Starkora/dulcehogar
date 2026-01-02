@@ -39,7 +39,7 @@ export function QuickQuoteForm() {
       `Podrian enviarme una cotizacion?`
     );
 
-    window.open(`https://api.whatsapp.com/send/?phone=51904065007&text=${message}&type=phone_number&app_absent=0`, '_blank');
+    window.open(`https://api.whatsapp.com/send/?phone=51957076760&text=${message}&type=phone_number&app_absent=0`, '_blank');
     
     // Mostrar alerta de éxito
     setAlertType('success');

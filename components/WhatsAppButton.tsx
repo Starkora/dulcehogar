@@ -1,7 +1,7 @@
 'use client';
 
 export function WhatsAppButton() {
-  const phoneNumber = '51904065007';
+  const phoneNumber = '51957076760';
   const message = encodeURIComponent('¡Hola! Me gustaría hacer un pedido de Dulce Hogar');
   const whatsappUrl = `https://api.whatsapp.com/send/?phone=${phoneNumber}&text=${message}&type=phone_number&app_absent=0`;
 

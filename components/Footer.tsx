@@ -79,7 +79,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                <span>+51 904065007</span>
+                <span>+51 957076760</span>
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" />

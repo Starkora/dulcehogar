@@ -68,7 +68,7 @@ export function PromoCard() {
         </p>
         
         <a
-          href="https://api.whatsapp.com/send/?phone=51904065007&text=¡Hola!%20Quiero%20usar%20mi%20descuento%20DULCE15&type=phone_number&app_absent=0"
+          href="https://api.whatsapp.com/send/?phone=51957076760&text=¡Hola!%20Quiero%20usar%20mi%20descuento%20DULCE15&type=phone_number&app_absent=0"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block bg-white text-pink-600 hover:bg-pink-50 px-6 py-3 rounded-full font-bold transition-all shadow-lg hover:shadow-xl cursor-pointer"
