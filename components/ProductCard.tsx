@@ -11,6 +11,7 @@ interface Product {
   price: number;
   image: string;
   category?: string;
+  isReferenceImage?: boolean;
 }
 
 interface ProductCardProps {
@@ -52,13 +53,20 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Product Image */}
       <div className="relative h-64 bg-gradient-to-br from-pink-100 to-orange-100">
         {product.image ? (
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          <>
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+            {product.isReferenceImage && (
+              <div className="absolute top-2 left-2 bg-black/70 text-white px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm">
+                Imagen referencial
+              </div>
+            )}
+          </>
         ) : (
           <div className="h-full flex items-center justify-center">
             {getIcon()}

@@ -22,7 +22,8 @@ export default function AdminProductos() {
     description: '',
     price: 0,
     image: '',
-    category: ''
+    category: '',
+    isReferenceImage: false
   });
 
   useEffect(() => {
@@ -88,7 +89,8 @@ export default function AdminProductos() {
       description: product.description,
       price: product.price,
       image: product.image,
-      category: product.category || ''
+      category: product.category || '',
+      isReferenceImage: product.isReferenceImage || false
     });
     setIsEditing(true);
   };
@@ -101,7 +103,7 @@ export default function AdminProductos() {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', description: '', price: 0, image: '', category: '' });
+    setFormData({ name: '', description: '', price: 0, image: '', category: '', isReferenceImage: false });
     setEditingProduct(null);
     setIsEditing(false);
     setShowNewCategoryInput(false);
@@ -237,6 +239,34 @@ export default function AdminProductos() {
                   step="0.01"
                   required
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Imagen Referencial
+                </label>
+                <div className="flex items-center gap-3 h-[52px]">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, isReferenceImage: !formData.isReferenceImage })}
+                    className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
+                      formData.isReferenceImage ? 'bg-pink-500' : 'bg-gray-300'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                        formData.isReferenceImage ? 'translate-x-7' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                  <span className="text-sm text-gray-600">
+                    {formData.isReferenceImage ? 'Sí' : 'No'}
+                  </span>
+                </div>
+                {formData.isReferenceImage && (
+                  <p className="text-xs text-gray-500 mt-2">
+                    Se mostrará "Imagen referencial" en la esquina
+                  </p>
+                )}
               </div>
             </div>
 

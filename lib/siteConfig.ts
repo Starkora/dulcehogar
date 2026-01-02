@@ -7,6 +7,7 @@ export interface Product {
   price: number;
   image: string;
   category?: string;
+  isReferenceImage?: boolean;
 }
 
 export interface GalleryImage {
