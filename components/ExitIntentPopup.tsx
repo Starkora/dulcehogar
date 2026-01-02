@@ -2,12 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import { X, Gift, ArrowRight } from 'lucide-react';
+import { getSiteConfig } from '@/lib/siteConfig';
 
 export function ExitIntentPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [hasShown, setHasShown] = useState(false);
+  const [config, setConfig] = useState(getSiteConfig());
 
   useEffect(() => {
+    setConfig(getSiteConfig());
+    
+    // Si el popup está deshabilitado en config, no hacer nada
+    if (!config.exitPopup.enabled) {
+      return;
+    }
+
     // Verificar si ya se mostró antes
     const shown = sessionStorage.getItem('exit-popup-shown');
     if (shown) {
@@ -41,7 +50,7 @@ export function ExitIntentPopup() {
     };
   }, [hasShown]);
 
-  if (!isVisible) return null;
+  if (!isVisible || !config.exitPopup.enabled) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fadeIn">
@@ -69,18 +78,18 @@ export function ExitIntentPopup() {
 
           <div className="bg-gradient-to-br from-pink-50 to-orange-50 rounded-xl p-6 mb-6">
             <p className="text-lg font-bold text-pink-600 mb-2">
-              Obtén 10% de Descuento
+              Obtén {config.exitPopup.discount}% de Descuento
             </p>
             <p className="text-gray-700 mb-4">
               En tu primer pedido. Usa el código:
             </p>
             <div className="bg-white border-2 border-pink-300 rounded-lg px-4 py-3 mb-4">
               <p className="text-2xl font-bold text-pink-600 tracking-wider">
-                DULCE10
+                {config.exitPopup.code}
               </p>
             </div>
             <p className="text-sm text-gray-600">
-              Válido en pedidos superiores a S/80
+              Válido en pedidos superiores a S/{config.exitPopup.minAmount}
             </p>
           </div>
 

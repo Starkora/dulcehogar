@@ -2,34 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { X, Clock, Sparkles, Gift, TrendingUp, AlertTriangle } from 'lucide-react';
+import { getSiteConfig } from '@/lib/siteConfig';
 
 export function UrgencyBanner() {
   const [isVisible, setIsVisible] = useState(true);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
+  const [config, setConfig] = useState(getSiteConfig());
 
   useEffect(() => {
-    // Calcular tiempo hasta fin de año
-    const calculateTimeLeft = () => {
-      const now = new Date();
-      const endOfYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
-      const difference = endOfYear.getTime() - now.getTime();
-
-      if (difference > 0) {
-        setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60)
-        });
-      }
-    };
-
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 60000); // Actualizar cada minuto
-
-    return () => clearInterval(timer);
+    setConfig(getSiteConfig());
   }, []);
 
-  if (!isVisible) return null;
+  if (!isVisible || !config.urgencyBanner.show) return null;
 
   return (
     <div className="bg-gradient-to-r from-pink-600 to-orange-600 text-white py-3 px-4 relative overflow-hidden">
@@ -39,11 +22,11 @@ export function UrgencyBanner() {
           <Sparkles className="w-5 h-5 animate-bounce" />
           <div className="flex-1">
             <p className="font-bold text-sm md:text-base">
-              ¡Última oportunidad! Pedidos para Año Nuevo hasta el 28 de Diciembre
+              {config.urgencyBanner.message}
             </p>
             <p className="text-xs md:text-sm opacity-90">
-              Solo quedan <span className="font-bold">{timeLeft.days}</span> días,{' '}
-              <span className="font-bold">{timeLeft.hours}</span> horas
+              Solo quedan <span className="font-bold">{config.urgencyBanner.daysLeft}</span> días,{' '}
+              <span className="font-bold">{config.urgencyBanner.hoursLeft}</span> horas
             </p>
           </div>
         </div>

@@ -1,11 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { Cake, Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Cake, Menu, X, Settings } from 'lucide-react';
+import { isAuthenticated } from '@/lib/auth';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    setIsAdmin(isAuthenticated());
+  }, []);
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -38,12 +44,6 @@ export function Header() {
               Galería
             </Link>
             <Link 
-              href="/calculadora" 
-              className="text-gray-700 hover:text-pink-500 font-semibold transition-colors"
-            >
-              Calcular Precio
-            </Link>
-            <Link 
               href="/faqs" 
               className="text-gray-700 hover:text-pink-500 font-semibold transition-colors"
             >
@@ -67,6 +67,15 @@ export function Header() {
             >
               Cotizar
             </Link>
+            {isAdmin && (
+              <Link 
+                href="/admin" 
+                className="text-gray-400 hover:text-pink-500 transition-colors"
+                title="Panel de Administración"
+              >
+                <Settings className="w-6 h-6" />
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -108,13 +117,6 @@ export function Header() {
               Galería
             </Link>
             <Link 
-              href="/calculadora" 
-              className="block text-gray-700 hover:text-pink-500 font-semibold py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Calcular Precio
-            </Link>
-            <Link 
               href="/faqs" 
               className="block text-gray-700 hover:text-pink-500 font-semibold py-2"
               onClick={() => setIsMenuOpen(false)}
@@ -142,6 +144,16 @@ export function Header() {
             >
               Cotizar
             </Link>
+            {isAdmin && (
+              <Link 
+                href="/admin" 
+                className="block text-gray-700 hover:text-pink-500 font-semibold py-2 flex items-center gap-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Settings className="w-5 h-5" />
+                Admin
+              </Link>
+            )}
           </div>
         )}
       </nav>

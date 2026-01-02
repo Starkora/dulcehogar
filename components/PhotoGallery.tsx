@@ -1,78 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight, Images } from 'lucide-react';
-
-interface GalleryImage {
-  id: number;
-  url: string;
-  category: string;
-  title: string;
-  description?: string;
-}
-
-// Imágenes de ejemplo (en producción vendrían de una base de datos o CMS)
-const galleryImages: GalleryImage[] = [
-  {
-    id: 1,
-    url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&h=800&fit=crop',
-    category: 'Bodas',
-    title: 'Torta de Bodas Elegante',
-    description: '3 pisos con flores naturales'
-  },
-  {
-    id: 2,
-    url: 'https://images.unsplash.com/photo-1588195538326-c5acd4cbbe01?w=800&h=800&fit=crop',
-    category: 'Cumpleaños',
-    title: 'Cupcakes Personalizados',
-    description: 'Decoración temática'
-  },
-  {
-    id: 3,
-    url: 'https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=800&h=800&fit=crop',
-    category: 'Bodas',
-    title: 'Torta con Detalles Dorados',
-    description: 'Oro comestible y flores'
-  },
-  {
-    id: 4,
-    url: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=800&h=800&fit=crop',
-    category: 'Comunión',
-    title: 'Galletas Decoradas',
-    description: 'Diseños personalizados'
-  },
-  {
-    id: 5,
-    url: 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=800&h=800&fit=crop',
-    category: 'Cumpleaños',
-    title: 'Red Velvet Artística',
-    description: 'Decoración pintada a mano'
-  },
-  {
-    id: 6,
-    url: 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=800&h=800&fit=crop',
-    category: 'Corporativo',
-    title: 'Mini Tartas',
-    description: 'Eventos empresariales'
-  },
-  {
-    id: 7,
-    url: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=800&h=800&fit=crop',
-    category: 'Cumpleaños',
-    title: 'Torta de Chocolate Premium',
-    description: 'Cobertura de ganache'
-  },
-  {
-    id: 8,
-    url: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=800&h=800&fit=crop',
-    category: 'Baby Shower',
-    title: 'Cupcakes Pastel',
-    description: 'Colores suaves'
-  },
-];
-
-const categories = ['Todas', 'Bodas', 'Cumpleaños', 'Comunión', 'Corporativo', 'Baby Shower'];
+import { getGalleryImages, type GalleryImage as GalleryImageType } from '@/lib/siteConfig';
 
 interface PhotoGalleryProps {
   maxImages?: number;
@@ -81,6 +12,14 @@ interface PhotoGalleryProps {
 export function PhotoGallery({ maxImages }: PhotoGalleryProps) {
   const [selectedCategory, setSelectedCategory] = useState('Todas');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [galleryImages, setGalleryImages] = useState<GalleryImageType[]>([]);
+
+  useEffect(() => {
+    setGalleryImages(getGalleryImages());
+  }, []);
+
+  // Obtener categorías únicas de las imágenes
+  const categories = ['Todas', ...Array.from(new Set(galleryImages.map(img => img.category)))];
 
   const filteredImages = selectedCategory === 'Todas'
     ? galleryImages
@@ -141,33 +80,42 @@ export function PhotoGallery({ maxImages }: PhotoGalleryProps) {
       </div>
 
       {/* Gallery Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {displayImages.map((image, index) => (
-          <div
-            key={image.id}
-            className="relative aspect-square group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all"
-            onClick={() => openLightbox(index)}
-          >
-            <Image
-              src={image.url}
-              alt={image.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                <p className="font-bold text-sm">{image.title}</p>
-                {image.description && (
-                  <p className="text-xs opacity-90">{image.description}</p>
-                )}
+      {displayImages.length > 0 ? (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {displayImages.map((image, index) => (
+            <div
+              key={image.id}
+              className="relative aspect-square group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all"
+              onClick={() => openLightbox(index)}
+            >
+              <Image
+                src={image.url}
+                alt={image.title}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                  <p className="font-bold text-sm">{image.title}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-16 bg-white rounded-xl">
+          <Images className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500 text-xl mb-2">
+            No hay imágenes en la galería todavía
+          </p>
+          <p className="text-gray-400">
+            Agrega imágenes desde el panel de administración
+          </p>
+        </div>
+      )}
 
       {/* Lightbox */}
-      {lightboxIndex !== null && (
+      {lightboxIndex !== null && displayImages.length > 0 && (
         <div
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
           onClick={closeLightbox}

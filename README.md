@@ -39,6 +39,11 @@ Una moderna página web para repostería construida con Next.js 16, TypeScript y
 # Instalar dependencias
 npm install
 
+# Configurar Cloudinary (requerido para subir imágenes)
+# 1. Copia .env.example a .env.local
+# 2. Completa con tus credenciales de Cloudinary
+# Ver CLOUDINARY_SETUP.md para instrucciones detalladas
+
 # Ejecutar en modo desarrollo
 npm run dev
 
@@ -82,9 +87,85 @@ dulcehogar/
 - **/productos** - Catálogo completo de productos con filtros
 - **/nosotros** - Historia, filosofía y equipo
 - **/contacto** - Formulario de contacto e información
-- **/admin/reviews** - Panel de administración para moderar reseñas (contraseña: `dulcehogar2024`)
+- **/admin** - Panel de administración completo (contraseña: `DulceHogar@2026VMT`)
+  - **/admin/productos** - Gestionar productos del catálogo
+  - **/admin/galeria** - Administrar imágenes de la galería
+  - **/admin/promociones** - Crear y editar promociones
+  - **/admin/configuracion** - Configurar visibilidad de secciones y popup de salida
 
-## Personalización
+## Panel de Administración
+
+El sitio cuenta con un panel de administración completo para gestionar todo el contenido dinámicamente:
+
+### Acceso
+- **URL**: `/admin`
+- **Contraseña**: `DulceHogar@2026VMT`
+- **Sesión**: Dura 24 horas
+- **Seguridad**: Solo usuarios autenticados pueden acceder
+
+### Funcionalidades
+
+#### 1. Gestión de Productos (`/admin/productos`)
+- Agregar nuevos productos con imagen, nombre, descripción, precio
+- Editar productos existentes
+- Eliminar productos
+- **Carga de imágenes**: Sube archivos directamente o ingresa URLs
+
+#### 2. Gestión de Galería (`/admin/galeria`)
+- Agregar imágenes a la galería con título y categoría
+- Editar información de imágenes
+- Eliminar imágenes
+- **Carga de imágenes**: Sube archivos directamente o ingresa URLs
+
+#### 3. Gestión de Promociones (`/admin/promociones`)
+- Crear promociones con descuento y condiciones
+- Agregar anuncios de temporada
+- Editar y eliminar promociones
+- Las promociones aparecen en la página principal
+
+#### 4. Configuración del Sitio (`/admin/configuracion`)
+- Mostrar/ocultar sección de Productos Destacados
+- Mostrar/ocultar sección de Promociones
+- Mostrar/ocultar sección de Galería
+- Configurar Popup de Salida:
+  - Habilitar/deshabilitar popup
+  - Editar porcentaje de descuento
+  - Editar código de descuento
+  - Establecer monto mínimo de compra
+
+### Sistema de Carga de Imágenes ☁️
+
+El panel incluye un sistema flexible para gestionar imágenes con almacenamiento en **Cloudinary**:
+
+**Dos Opciones de Carga:**
+1. **Subir Archivo** (Recomendado): Las imágenes se suben a Cloudinary automáticamente
+2. **Ingresar URL**: Usa URLs de Cloudinary existentes o imágenes externas
+
+**Características:**
+- ✅ **Almacenamiento en la nube**: Cloudinary CDN global
+- ✅ **Optimización automática**: Compresión inteligente y conversión a WebP
+- ✅ **Listo para producción**: Funciona en Vercel, Netlify, etc.
+- ✅ Formatos soportados: JPEG, PNG, GIF, WEBP
+- ✅ Tamaño máximo: 5MB por imagen
+- ✅ Vista previa antes de guardar
+- ✅ Plan gratuito generoso: 25GB almacenamiento + 25GB bandwidth/mes
+
+**Configuración Requerida:**
+1. Crear cuenta gratuita en [Cloudinary](https://cloudinary.com/users/register/free)
+2. Copiar `.env.example` a `.env.local`
+3. Agregar credenciales de Cloudinary
+4. Ver [CLOUDINARY_SETUP.md](./CLOUDINARY_SETUP.md) para instrucciones completas
+
+**Documentación**: Ver [ADMIN_IMAGE_UPLOAD.md](./ADMIN_IMAGE_UPLOAD.md)
+
+### Almacenamiento de Datos
+
+- **Contenido del sitio**: localStorage (ideal para desarrollo y demostración)
+- **Imágenes**: Cloudinary (listo para producción)
+- **Para producción**: Migrar datos de localStorage a base de datos (Supabase, PostgreSQL, MongoDB)
+- **Clave localStorage**: `dulcehogar-siteconfig`
+
+## Páginas
 
 ### WhatsApp
 Actualiza el número de WhatsApp en:
@@ -96,34 +177,6 @@ Formato: `57300123456` (código país + número sin espacios)
 Los colores principales se pueden modificar en los componentes:
 - Rosa: `pink-500`, `pink-600`
 - Naranja: `orange-50`, `orange-500`
-
-### Productos
-Edita los productos en `app/productos/page.tsx` y `app/page.tsx` (productos destacados).
-
-### Información de Contacto
-Actualiza la información en:
-- `components/Footer.tsx`
-- `app/contacto/page.tsx`
-
-### Reseñas
-Las reseñas se almacenan en localStorage del navegador con la clave `dulcehogar-all-reviews`.
-
-**Sistema de Moderación:**
-- Las reseñas pasan por validación automática
-- Detecta: spam, URLs, palabras prohibidas, contenido repetitivo
-- Rate limiting: máximo 2 reseñas por hora por usuario
-- Reseñas sospechosas quedan pendientes de aprobación manual
-- Panel de admin en `/admin/reviews` (contraseña: `dulcehogar2024`)
-
-**Validaciones automáticas:**
-- Mínimo 10 caracteres en el comentario
-- Máximo 500 caracteres
-- No permite URLs ni información de contacto
-- Detecta patrones de spam
-- Calificaciones 1-2 estrellas requieren revisión manual
-
-Para limpiar todas las reseñas: `localStorage.removeItem('dulcehogar-all-reviews')`
-Edita los productos en `app/productos/page.tsx` y `app/page.tsx` (productos destacados).
 
 ### Información de Contacto
 Actualiza la información en:

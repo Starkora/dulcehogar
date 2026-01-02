@@ -13,9 +13,9 @@ import { UrgencyBanner, PromoCard, LimitedSlotsAlert, SeasonalPromo } from '@/co
 import { ExitIntentPopup } from '@/components/ExitIntentPopup';
 import { InstagramFeed } from '@/components/InstagramFeed';
 import { PhotoGallery } from '@/components/PhotoGallery';
-import { PriceCalculator } from '@/components/PriceCalculator';
 import { getApprovedReviews } from '@/lib/reviewModeration';
-import { Cake, Cookie, Award, Calculator, HelpCircle } from 'lucide-react';
+import { getSiteConfig, getProducts, getPromotions, Product as SiteProduct } from '@/lib/siteConfig';
+import { Cake, Cookie, Award, HelpCircle, MessageCircle } from 'lucide-react';
 
 interface Testimonial {
   name: string;
@@ -25,45 +25,25 @@ interface Testimonial {
   date: string;
 }
 
-const defaultTestimonials: Testimonial[] = [
-  {
-    name: 'María González',
-    rating: 5,
-    comment: 'La torta de mi boda fue espectacular! Todos los invitados preguntaron dónde la habíamos conseguido. Además de hermosa, estaba deliciosa.',
-    event: 'Boda',
-    date: 'Hace 2 meses'
-  },
-  {
-    name: 'Carlos Ramírez',
-    rating: 5,
-    comment: 'Los cupcakes para el cumpleaños de mi hija fueron un éxito total. Bellamente decorados y con sabores increíbles. Muy recomendados!',
-    event: 'Cumpleaños',
-    date: 'Hace 1 mes'
-  },
-  {
-    name: 'Ana Martínez',
-    rating: 5,
-    comment: 'Excelente servicio y calidad. La torta red velvet estaba divina y la entrega fue puntual. Definitivamente volveré a ordenar.',
-    event: 'Aniversario',
-    date: 'Hace 3 semanas'
-  }
-];
-
 export default function Home() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(defaultTestimonials);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [config, setConfig] = useState(getSiteConfig());
+  const [products, setProducts] = useState<SiteProduct[]>(getProducts());
+  const [promotions, setPromotions] = useState(getPromotions());
 
-  // Cargar solo reseñas aprobadas
+  // Cargar solo reseñas aprobadas (sin testimoniales por defecto)
   const loadApprovedReviews = () => {
     const approved = getApprovedReviews();
-    if (approved.length > 0) {
-      setTestimonials(approved);
-    }
+    setTestimonials(approved);
   };
 
-  // Load testimonials on mount
+  // Load testimonials and config on mount
   useEffect(() => {
     loadApprovedReviews();
+    setConfig(getSiteConfig());
+    setProducts(getProducts());
+    setPromotions(getPromotions());
   }, []);
 
   const handleNewReview = () => {
@@ -71,38 +51,18 @@ export default function Home() {
     loadApprovedReviews();
     setShowReviewForm(false);
   };
-  const featuredProducts = [
-    {
-      id: 1,
-      name: 'Torta de Chocolate',
-      description: 'Deliciosa torta de chocolate con ganache',
-      price: 45,
-      image: '/images/chocolate-cake.jpg'
-    },
-    {
-      id: 2,
-      name: 'Cupcakes Variados',
-      description: 'Pack de 6 cupcakes con diferentes sabores',
-      price: 25,
-      image: '/images/cupcakes.jpg'
-    },
-    {
-      id: 3,
-      name: 'Galletas Artesanales',
-      description: 'Docena de galletas decoradas',
-      price: 18,
-      image: '/images/cookies.jpg'
-    }
-  ];
+
+  const activePromotions = promotions.filter(p => p.isActive);
 
   return (
     <>
-      <UrgencyBanner />
+      {config.urgencyBanner.show && <UrgencyBanner />}
       <Header />
       <WhatsAppButton />
       <ExitIntentPopup />
       <main className="min-h-screen">
         {/* Hero Section */}
+        {config.showHero && (
         <section className="relative h-[600px] flex items-center justify-center bg-gradient-to-br from-pink-50 to-orange-50">
           <div className="absolute inset-0 bg-[url('/images/bakery-pattern.png')] opacity-10"></div>
           <div className="relative z-10 text-center px-4">
@@ -128,8 +88,10 @@ export default function Home() {
             </div>
           </div>
         </section>
+        )}
 
         {/* About Section */}
+        {config.showAbout && (
         <section className="py-20 px-4 bg-white">
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -161,8 +123,10 @@ export default function Home() {
             </div>
           </div>
         </section>
+        )}
 
         {/* Featured Products */}
+        {config.showProducts && products.length > 0 && (
         <section className="py-20 px-4 bg-gradient-to-br from-pink-50 to-orange-50">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">
@@ -178,7 +142,7 @@ export default function Home() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {featuredProducts.map((product) => (
+              {products.slice(0, 6).map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
@@ -192,35 +156,61 @@ export default function Home() {
             </div>
           </div>
         </section>
+        )}
 
         {/* Promoción Especial */}
+        {config.showPromotions && activePromotions.length > 0 && (
         <section className="py-16 px-4 bg-white">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-            <PromoCard />
-            <SeasonalPromo />
+            {activePromotions.slice(0, 2).map((promo) => (
+              promo.type === 'discount' ? (
+                <div key={promo.id} className="bg-gradient-to-br from-orange-400 via-pink-500 to-pink-600 rounded-2xl shadow-2xl p-8 text-white relative overflow-hidden">
+                  <div className="absolute top-4 left-4">
+                    <span className="bg-white text-pink-500 px-4 py-1 rounded-full text-sm font-bold">
+                      OFERTA ESPECIAL
+                    </span>
+                  </div>
+                  <div className="mt-12">
+                    <h3 className="text-4xl font-bold mb-2">{promo.title}</h3>
+                    <p className="text-lg opacity-90 mb-4">En tu primer pedido</p>
+                    <p className="text-sm mb-6">
+                      {promo.description}
+                    </p>
+                    <Link
+                      href={promo.ctaLink}
+                      className="bg-white text-pink-500 hover:bg-pink-50 px-6 py-3 rounded-full font-semibold transition-all inline-block shadow-lg"
+                    >
+                      {promo.ctaText}
+                    </Link>
+                    {promo.validUntil && (
+                      <p className="text-xs mt-4 opacity-75">*Válido hasta el {promo.validUntil}. No acumulable con otras promociones.</p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div key={promo.id} className="bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-2xl shadow-2xl p-8 text-white text-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-[url('/images/confetti.png')] opacity-10"></div>
+                  <div className="relative z-10">
+                    <h3 className="text-4xl font-bold mb-4">{promo.title}</h3>
+                    <p className="text-lg mb-6">
+                      {promo.description}
+                    </p>
+                    <Link
+                      href={promo.ctaLink}
+                      className="bg-white text-purple-600 hover:bg-purple-50 px-8 py-3 rounded-full font-semibold transition-all inline-block shadow-lg"
+                    >
+                      {promo.ctaText}
+                    </Link>
+                  </div>
+                </div>
+              )
+            ))}
           </div>
         </section>
-
-        {/* Calculadora de Precios Preview */}
-        <section className="py-20 px-4 bg-gradient-to-br from-pink-50 to-orange-50">
-          <div className="max-w-4xl mx-auto text-center mb-12">
-            <Calculator className="w-12 h-12 text-pink-500 mx-auto mb-4" />
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">
-              ¿Cuánto Costaría tu Pedido?
-            </h2>
-            <p className="text-gray-600 text-lg mb-8">
-              Usa nuestra calculadora para obtener una estimación instantánea
-            </p>
-            <Link
-              href="/calculadora"
-              className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all inline-block shadow-lg"
-            >
-              Ir a la Calculadora
-            </Link>
-          </div>
-        </section>
+        )}
 
         {/* Galería Preview */}
+        {config.showGallery && (
         <section className="py-20 px-4 bg-white">
           <div className="max-w-7xl mx-auto">
             <PhotoGallery maxImages={6} />
@@ -234,8 +224,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+        )}
 
-        {/* Services Section */}
+        {/* Services Section - Always visible */}
         <section className="py-20 px-4 bg-white">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">
@@ -277,13 +268,16 @@ export default function Home() {
         </section>
 
         {/* Instagram Feed */}
+        {config.showInstagram && (
         <section className="py-20 px-4 bg-gradient-to-br from-pink-50 to-orange-50">
           <div className="max-w-7xl mx-auto">
             <InstagramFeed maxPosts={6} columns={3} />
           </div>
         </section>
+        )}
 
         {/* Testimonials Section */}
+        {config.showTestimonials && (
         <section className="py-20 px-4 bg-white">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">
@@ -292,21 +286,42 @@ export default function Home() {
             <p className="text-center text-gray-600 text-lg mb-12">
               La satisfacción de nuestros clientes es nuestra mejor publicidad
             </p>
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
-              {testimonials.slice(0, 6).map((testimonial, index) => (
-                <TestimonialCard key={index} {...testimonial} />
-              ))}
-            </div>
+            
+            {testimonials.length === 0 ? (
+              <div className="text-center py-12 bg-gradient-to-br from-pink-50 to-orange-50 rounded-2xl">
+                <MessageCircle className="w-16 h-16 text-pink-300 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-gray-700 mb-3">
+                  Aún no hay reseñas
+                </h3>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                  Sé el primero en compartir tu experiencia con nosotros. Tu opinión es muy valiosa.
+                </p>
+                <button
+                  onClick={() => setShowReviewForm(true)}
+                  className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-all shadow-lg hover:shadow-xl inline-block"
+                >
+                  Dejar la Primera Reseña
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="grid md:grid-cols-3 gap-8 mb-12">
+                  {testimonials.slice(0, 6).map((testimonial, index) => (
+                    <TestimonialCard key={index} {...testimonial} />
+                  ))}
+                </div>
 
-            {/* Review Form Toggle */}
-            <div className="text-center">
-              <button
-                onClick={() => setShowReviewForm(!showReviewForm)}
-                className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all shadow-lg hover:shadow-xl inline-block"
-              >
-                {showReviewForm ? 'Ver Reseñas' : 'Dejar una Reseña'}
-              </button>
-            </div>
+                {/* Review Form Toggle */}
+                <div className="text-center">
+                  <button
+                    onClick={() => setShowReviewForm(!showReviewForm)}
+                    className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all shadow-lg hover:shadow-xl inline-block"
+                  >
+                    {showReviewForm ? 'Ver Reseñas' : 'Dejar una Reseña'}
+                  </button>
+                </div>
+              </>
+            )}
 
             {/* Review Form */}
             {showReviewForm && (
@@ -316,6 +331,7 @@ export default function Home() {
             )}
           </div>
         </section>
+        )}
 
         {/* CTA Section */}
         <section className="py-20 px-4 bg-gradient-to-r from-pink-500 to-orange-500 text-white">

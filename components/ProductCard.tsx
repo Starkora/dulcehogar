@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Cake, Cookie, Dessert } from 'lucide-react';
 
 interface Product {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
   price: number;
