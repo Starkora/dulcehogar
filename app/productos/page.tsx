@@ -49,7 +49,7 @@ export default function ProductsPage() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-3 rounded-full font-semibold transition-all shadow-md hover:shadow-lg ${
+                className={`px-6 py-3 rounded-full font-semibold transition-all shadow-md hover:shadow-lg cursor-pointer ${
                   selectedCategory === category
                     ? 'bg-pink-500 text-white'
                     : 'bg-white hover:bg-pink-500 hover:text-white text-gray-700'

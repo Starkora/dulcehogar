@@ -175,12 +175,17 @@ export default function Home() {
                     <p className="text-sm mb-6">
                       {promo.description}
                     </p>
-                    <Link
-                      href={promo.ctaLink}
-                      className="bg-white text-pink-500 hover:bg-pink-50 px-6 py-3 rounded-full font-semibold transition-all inline-block shadow-lg"
+                    <button
+                      onClick={() => {
+                        const message = encodeURIComponent(
+                          `¡Hola! Me interesa la promoción: ${promo.title}${promo.code ? ` - Código: ${promo.code}` : ''}`
+                        );
+                        window.open(`https://wa.me/51957076760?text=${message}`, '_blank');
+                      }}
+                      className="bg-white text-pink-500 hover:bg-pink-50 px-6 py-3 rounded-full font-semibold transition-all inline-block shadow-lg cursor-pointer"
                     >
                       {promo.ctaText}
-                    </Link>
+                    </button>
                     {promo.validUntil && (
                       <p className="text-xs mt-4 opacity-75">*Válido hasta el {promo.validUntil}. No acumulable con otras promociones.</p>
                     )}
@@ -193,12 +198,17 @@ export default function Home() {
                     <p className="text-lg mb-6">
                       {promo.description}
                     </p>
-                    <Link
-                      href={promo.ctaLink}
-                      className="bg-white text-purple-600 hover:bg-purple-50 px-8 py-3 rounded-full font-semibold transition-all inline-block shadow-lg"
+                    <button
+                      onClick={() => {
+                        const message = encodeURIComponent(
+                          `¡Hola! Me interesa la promoción: ${promo.title}${promo.code ? ` - Código: ${promo.code}` : ''}`
+                        );
+                        window.open(`https://wa.me/51957076760?text=${message}`, '_blank');
+                      }}
+                      className="bg-white text-purple-600 hover:bg-purple-50 px-8 py-3 rounded-full font-semibold transition-all inline-block shadow-lg cursor-pointer"
                     >
                       {promo.ctaText}
-                    </Link>
+                    </button>
                   </div>
                 </div>
               )
@@ -296,7 +306,7 @@ export default function Home() {
                 </p>
                 <button
                   onClick={() => setShowReviewForm(true)}
-                  className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-all shadow-lg hover:shadow-xl inline-block"
+                  className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-all shadow-lg hover:shadow-xl inline-block cursor-pointer"
                 >
                   Dejar la Primera Reseña
                 </button>
@@ -313,7 +323,7 @@ export default function Home() {
                 <div className="text-center">
                   <button
                     onClick={() => setShowReviewForm(!showReviewForm)}
-                    className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all shadow-lg hover:shadow-xl inline-block"
+                    className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all shadow-lg hover:shadow-xl inline-block cursor-pointer"
                   >
                     {showReviewForm ? 'Ver Reseñas' : 'Dejar una Reseña'}
                   </button>
