@@ -53,6 +53,11 @@ export interface SiteConfig {
     daysLeft: number;
     hoursLeft: number;
   };
+  limitedSlotsAlert: {
+    show: boolean;
+    slots: number;
+    message: string;
+  };
   exitPopup: {
     enabled: boolean;
     discount: number;
@@ -82,6 +87,11 @@ const DEFAULT_CONFIG: SiteConfig = {
     message: '¡Última oportunidad! Pedidos para Año Nuevo hasta el 28 de Diciembre',
     daysLeft: 363,
     hoursLeft: 23
+  },
+  limitedSlotsAlert: {
+    show: true,
+    slots: 3,
+    message: '¡Espacios Limitados Esta Semana!'
   },
   exitPopup: {
     enabled: true,

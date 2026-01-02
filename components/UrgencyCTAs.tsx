@@ -85,17 +85,14 @@ export function PromoCard() {
 }
 
 export function LimitedSlotsAlert() {
-  const [slots, setSlots] = useState(3);
+  const [config, setConfig] = useState(getSiteConfig());
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Simular actualización de espacios disponibles
-    const storedSlots = localStorage.getItem('available-slots');
-    const alertVisible = localStorage.getItem('slots-alert-visible');
+    const loadedConfig = getSiteConfig();
+    setConfig(loadedConfig);
     
-    if (storedSlots) {
-      setSlots(parseInt(storedSlots));
-    }
+    const alertVisible = localStorage.getItem('slots-alert-visible');
     if (alertVisible !== null) {
       setIsVisible(alertVisible === 'true');
     }
@@ -112,7 +109,7 @@ export function LimitedSlotsAlert() {
     }, 24 * 60 * 60 * 1000);
   };
 
-  if (slots === 0 || !isVisible) return null;
+  if (!config.limitedSlotsAlert.show || config.limitedSlotsAlert.slots === 0 || !isVisible) return null;
 
   return (
     <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 relative">
@@ -120,10 +117,10 @@ export function LimitedSlotsAlert() {
         <AlertTriangle className="w-6 h-6 text-red-500 flex-shrink-0 mt-1" />
         <div className="flex-1">
           <p className="font-bold text-red-900 mb-1">
-            ¡Espacios Limitados Esta Semana!
+            {config.limitedSlotsAlert.message}
           </p>
           <p className="text-red-700 text-sm">
-            Solo quedan <span className="font-bold text-xl">{slots}</span> espacios disponibles para pedidos de esta semana. 
+            Solo quedan <span className="font-bold text-xl">{config.limitedSlotsAlert.slots}</span> espacios disponibles para pedidos de esta semana. 
             ¡Reserva el tuyo ahora!
           </p>
         </div>

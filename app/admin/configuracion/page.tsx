@@ -43,6 +43,13 @@ export default function AdminConfiguracion() {
     });
   };
 
+  const handleSlotsAlertChange = (field: string, value: any) => {
+    setConfig({
+      ...config,
+      limitedSlotsAlert: { ...config.limitedSlotsAlert, [field]: value }
+    });
+  };
+
   const handleSave = () => {
     updateSiteConfig(config);
     setSaved(true);
@@ -198,6 +205,76 @@ export default function AdminConfiguracion() {
                       max="23"
                     />
                   </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Alerta de Espacios Limitados */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            Alerta de Espacios Limitados
+          </h2>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-800">Mostrar Alerta</h3>
+                <p className="text-sm text-gray-600">Alerta de espacios disponibles en productos destacados</p>
+              </div>
+              <button
+                onClick={() => handleSlotsAlertChange('show', !config.limitedSlotsAlert.show)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer ${
+                  config.limitedSlotsAlert.show
+                    ? 'bg-green-500 hover:bg-green-600 text-white'
+                    : 'bg-gray-300 hover:bg-gray-400 text-gray-700'
+                }`}
+              >
+                {config.limitedSlotsAlert.show ? (
+                  <>
+                    <Eye className="w-5 h-5" />
+                    Visible
+                  </>
+                ) : (
+                  <>
+                    <EyeOff className="w-5 h-5" />
+                    Oculto
+                  </>
+                )}
+              </button>
+            </div>
+
+            {config.limitedSlotsAlert.show && (
+              <>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Mensaje de la Alerta
+                  </label>
+                  <input
+                    type="text"
+                    value={config.limitedSlotsAlert.message}
+                    onChange={(e) => handleSlotsAlertChange('message', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    placeholder="¡Espacios Limitados Esta Semana!"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Espacios Disponibles
+                  </label>
+                  <input
+                    type="number"
+                    value={config.limitedSlotsAlert.slots}
+                    onChange={(e) => handleSlotsAlertChange('slots', Number(e.target.value))}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    min="0"
+                    max="99"
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    Establece en 0 para ocultar la alerta automáticamente
+                  </p>
                 </div>
               </>
             )}
