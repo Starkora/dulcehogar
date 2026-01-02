@@ -23,7 +23,8 @@ export default function AdminProductos() {
     price: 0,
     image: '',
     category: '',
-    isReferenceImage: false
+    isReferenceImage: false,
+    isApproximatePrice: false
   });
 
   useEffect(() => {
@@ -90,7 +91,8 @@ export default function AdminProductos() {
       price: product.price,
       image: product.image,
       category: product.category || '',
-      isReferenceImage: product.isReferenceImage || false
+      isReferenceImage: product.isReferenceImage || false,
+      isApproximatePrice: product.isApproximatePrice || false
     });
     setIsEditing(true);
   };
@@ -103,7 +105,7 @@ export default function AdminProductos() {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', description: '', price: 0, image: '', category: '', isReferenceImage: false });
+    setFormData({ name: '', description: '', price: 0, image: '', category: '', isReferenceImage: false, isApproximatePrice: false });
     setEditingProduct(null);
     setIsEditing(false);
     setShowNewCategoryInput(false);
@@ -268,6 +270,35 @@ export default function AdminProductos() {
                   </p>
                 )}
               </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Precio Aproximado
+              </label>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, isApproximatePrice: !formData.isApproximatePrice })}
+                  className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors cursor-pointer ${
+                    formData.isApproximatePrice ? 'bg-pink-500' : 'bg-gray-300'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                      formData.isApproximatePrice ? 'translate-x-7' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+                <span className="text-sm text-gray-600">
+                  {formData.isApproximatePrice ? 'Sí' : 'No'}
+                </span>
+              </div>
+              {formData.isApproximatePrice && (
+                <p className="text-xs text-gray-500 mt-2">
+                  Se mostrará "Precio referencial" y el precio real se confirmará por WhatsApp
+                </p>
+              )}
             </div>
 
             <ImageUpload

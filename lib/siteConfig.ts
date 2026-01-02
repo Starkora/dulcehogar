@@ -8,6 +8,7 @@ export interface Product {
   image: string;
   category?: string;
   isReferenceImage?: boolean;
+  isApproximatePrice?: boolean;
 }
 
 export interface GalleryImage {

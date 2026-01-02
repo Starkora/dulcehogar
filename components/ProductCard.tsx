@@ -12,6 +12,7 @@ interface Product {
   image: string;
   category?: string;
   isReferenceImage?: boolean;
+  isApproximatePrice?: boolean;
 }
 
 interface ProductCardProps {
@@ -40,9 +41,12 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   const handleOrder = () => {
-    const phoneNumber = '573001234567';
+    const phoneNumber = '51957076760';
+    const priceText = product.isApproximatePrice 
+      ? `${formatPrice(product.price)} (precio referencial)` 
+      : formatPrice(product.price);
     const message = encodeURIComponent(
-      `¡Hola! Me interesa ordenar: ${product.name} - ${formatPrice(product.price)}\n\n${product.description}`
+      `¡Hola! Me interesa ordenar: ${product.name} - ${priceText}\n\n${product.description}${product.isApproximatePrice ? '\n\n¿Cuál sería el precio exacto?' : ''}` 
     );
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
@@ -106,9 +110,16 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-2xl font-bold text-pink-500">
-            {formatPrice(product.price)}
-          </span>
+          <div>
+            <span className="text-2xl font-bold text-pink-500">
+              {formatPrice(product.price)}
+            </span>
+            {product.isApproximatePrice && (
+              <p className="text-xs text-gray-500 mt-1">
+                Precio referencial*
+              </p>
+            )}
+          </div>
           <button 
             onClick={handleOrder}
             className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-full font-semibold transition-all shadow-md hover:shadow-lg cursor-pointer"
