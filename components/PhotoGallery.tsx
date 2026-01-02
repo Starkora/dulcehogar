@@ -157,9 +157,6 @@ export function PhotoGallery({ maxImages }: PhotoGalleryProps) {
               <h3 className="text-2xl font-bold mb-2">
                 {displayImages[lightboxIndex].title}
               </h3>
-              <p className="text-gray-300">
-                {displayImages[lightboxIndex].description}
-              </p>
               <p className="text-sm text-gray-400 mt-2">
                 Categoría: {displayImages[lightboxIndex].category} • 
                 Imagen {lightboxIndex + 1} de {displayImages.length}
