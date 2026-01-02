@@ -10,7 +10,7 @@ Esta funcionalidad está disponible en:
 - **Productos**: Para la imagen principal del producto
 - **Galería**: Para las imágenes de la galería
 
-## 🚀 Almacenamiento en Cloudinary
+## Almacenamiento en Cloudinary
 
 Las imágenes subidas se guardan en **Cloudinary**, un servicio de almacenamiento en la nube que ofrece:
 - ✅ CDN global para carga rápida

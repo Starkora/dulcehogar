@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Settings, Package, Image, Tag, Eye, ArrowLeft, LogOut } from 'lucide-react';
+import { Settings, Package, Image, Tag, Eye, ArrowLeft, LogOut, Instagram } from 'lucide-react';
 import { isAuthenticated, logout } from '@/lib/auth';
 
 export default function AdminDashboard() {
@@ -125,6 +125,22 @@ export default function AdminDashboard() {
             </h2>
             <p className="text-gray-600">
               Controla qué secciones mostrar en el sitio
+            </p>
+          </Link>
+
+          {/* Instagram */}
+          <Link
+            href="/admin/instagram"
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer"
+          >
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center mb-4">
+              <Instagram className="w-8 h-8 text-pink-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              Instagram
+            </h2>
+            <p className="text-gray-600">
+              Gestiona los posts que aparecen en tu feed
             </p>
           </Link>
 

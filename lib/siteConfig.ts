@@ -29,6 +29,15 @@ export interface Promotion {
   isActive: boolean;
 }
 
+export interface InstagramPost {
+  id: string;
+  image: string;
+  likes: number;
+  comments: number;
+  caption: string;
+  postUrl?: string;
+}
+
 export interface SiteConfig {
   showHero: boolean;
   showAbout: boolean;
@@ -56,6 +65,8 @@ const DEFAULT_PRODUCTS: Product[] = [];
 const DEFAULT_GALLERY: GalleryImage[] = [];
 
 const DEFAULT_PROMOTIONS: Promotion[] = [];
+
+const DEFAULT_INSTAGRAM_POSTS: InstagramPost[] = [];
 
 const DEFAULT_CONFIG: SiteConfig = {
   showHero: true,
@@ -193,4 +204,40 @@ export const updateSiteConfig = (updates: Partial<SiteConfig>) => {
   const config = getSiteConfig();
   const newConfig = { ...config, ...updates };
   saveSiteConfig(newConfig);
+};
+
+// Funciones para posts de Instagram
+export const getInstagramPosts = (): InstagramPost[] => {
+  if (typeof window === 'undefined') return DEFAULT_INSTAGRAM_POSTS;
+  const saved = localStorage.getItem('dulcehogar_instagram');
+  return saved ? JSON.parse(saved) : DEFAULT_INSTAGRAM_POSTS;
+};
+
+export const saveInstagramPosts = (posts: InstagramPost[]) => {
+  localStorage.setItem('dulcehogar_instagram', JSON.stringify(posts));
+};
+
+export const addInstagramPost = (post: Omit<InstagramPost, 'id'>) => {
+  const posts = getInstagramPosts();
+  const newPost = {
+    ...post,
+    id: Date.now().toString()
+  };
+  posts.unshift(newPost); // Agregar al inicio
+  saveInstagramPosts(posts);
+  return newPost;
+};
+
+export const updateInstagramPost = (id: string, updates: Partial<InstagramPost>) => {
+  const posts = getInstagramPosts();
+  const index = posts.findIndex(p => p.id === id);
+  if (index !== -1) {
+    posts[index] = { ...posts[index], ...updates };
+    saveInstagramPosts(posts);
+  }
+};
+
+export const deleteInstagramPost = (id: string) => {
+  const posts = getInstagramPosts().filter(p => p.id !== id);
+  saveInstagramPosts(posts);
 };

@@ -1,6 +1,6 @@
 # Sistema de Administración - Dulce Hogar
 
-## 🔒 SEGURIDAD
+## SEGURIDAD
 
 El panel de administración ahora está **protegido con contraseña**.
 
@@ -18,19 +18,19 @@ El panel de administración ahora está **protegido con contraseña**.
 - Haz clic en el botón "Cerrar Sesión" en el panel de admin
 - O espera 24 horas para que la sesión expire automáticamente
 
-## 🎯 Resumen
+## Resumen
 
 Se ha implementado un sistema completo de administración para tu sitio web que te permite controlar todo el contenido dinámicamente sin necesidad de editar código.
 
-## 🚀 Acceso al Panel de Administración
+## Acceso al Panel de Administración
 
-1. **Visita** `/admin/login` o haz clic en el ícono de configuración (⚙️) en el header (solo visible si estás autenticado)
+1. **Visita** `/admin/login` o haz clic en el ícono de configuración en el header (solo visible si estás autenticado)
 2. **Ingresa la contraseña:** `dulcehogar2026` (por defecto)
 3. **Accede** al panel de administración
 
 **Nota:** El ícono de admin solo es visible para usuarios autenticados, manteniéndolo oculto para visitantes comunes.
 
-## 📋 Funcionalidades
+## Funcionalidades
 
 ### 1. Gestión de Productos (`/admin/productos`)
 - ✅ Agregar nuevos productos
@@ -108,7 +108,7 @@ Se ha implementado un sistema completo de administración para tu sitio web que 
 - Ya existía anteriormente
 - Aprobar/rechazar reseñas de clientes
 
-## 🎨 Cambios en la Página Principal
+## Cambios en la Página Principal
 
 ### Sin Reseñas
 Cuando no hay reseñas aprobadas, se muestra:
@@ -126,7 +126,7 @@ Todas las secciones ahora respetan la configuración:
 - Si está desactivada en admin, no se muestra
 - Si está activada, se muestra con el contenido actualizado
 
-## 💾 Almacenamiento
+## Almacenamiento
 
 Los datos se guardan en **localStorage** del navegador:
 - `dulcehogar_products` - Productos
@@ -135,7 +135,7 @@ Los datos se guardan en **localStorage** del navegador:
 - `dulcehogar_config` - Configuración del sitio (incluye popup)
 - `dulcehogar_admin_auth` - Token de autenticación (expira en 24h)
 
-## 📝 Cómo Usar
+## Cómo Usar
 
 ### Agregar un Producto
 1. Ve a `/admin/productos`
@@ -172,7 +172,7 @@ Los datos se guardan en **localStorage** del navegador:
 5. Verás una vista previa del mensaje
 6. Haz clic en "Guardar Configuración"
 
-## ⚠️ Notas Importantes
+## Notas Importantes
 
 1. **Seguridad:** El panel está protegido con contraseña. Cambia la contraseña por defecto en producción.
 2. **Sesión:** La sesión expira en 24 horas. Deberás volver a iniciar sesión.
@@ -181,7 +181,7 @@ Los datos se guardan en **localStorage** del navegador:
 5. **Recarga:** Después de hacer cambios, recarga la página principal para verlos reflejados
 6. **Producción:** Para un sitio en producción, considera migrar a una base de datos real y usar NextAuth.js
 
-## 🔄 Resetear Configuración
+## Resetear Configuración
 
 Si quieres volver a los valores por defecto:
 1. Abre la consola del navegador (F12)
@@ -195,7 +195,7 @@ localStorage.removeItem('dulcehogar_admin_auth'); // Cierra sesión
 ```
 3. Recarga la página
 
-## 🎯 Próximos Pasos Recomendados
+## Próximos Pasos Recomendados
 
 Para un sitio en producción, considera:
 1. **Cambiar la contraseña por defecto** en `lib/auth.ts`
@@ -205,6 +205,6 @@ Para un sitio en producción, considera:
 5. Implementar backup automático de configuración
 6. Agregar roles de usuario (admin, editor, etc.)
 
-## 📧 Soporte
+## Soporte
 
 Si tienes preguntas o necesitas ayuda, consulta la documentación de Next.js o contacta al desarrollador.

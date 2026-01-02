@@ -174,4 +174,4 @@ En el Dashboard de Cloudinary puedes ver:
 
 ---
 
-✅ **¡Listo!** Ahora tus imágenes están en la nube y optimizadas automáticamente.
+**¡Listo!** Ahora tus imágenes están en la nube y optimizadas automáticamente.
