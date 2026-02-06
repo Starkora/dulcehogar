@@ -17,17 +17,22 @@ export default function AdminLogin() {
     setError('');
     setLoading(true);
 
-    // Simular un pequeño delay para UX
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    if (login(password)) {
-      router.push('/admin');
-    } else {
-      setError('Contraseña incorrecta');
-      setPassword('');
+    try {
+      const success = await login(password);
+      
+      if (success) {
+        router.push('/admin');
+        router.refresh();
+      } else {
+        setError('Contraseña incorrecta');
+        setPassword('');
+      }
+    } catch (err) {
+      setError('Error al iniciar sesión. Intenta nuevamente.');
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   return (

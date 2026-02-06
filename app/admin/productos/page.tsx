@@ -45,11 +45,15 @@ export default function AdminProductos() {
   });
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/admin/login');
-    } else {
-      loadProducts();
-    }
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      if (!authenticated) {
+        router.push('/admin/login');
+      } else {
+        loadProducts();
+      }
+    };
+    checkAuth();
   }, [router]);
 
   const loadProducts = async () => {

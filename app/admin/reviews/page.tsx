@@ -24,12 +24,16 @@ export default function AdminReviews() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/admin/login');
-    } else {
-      loadReviews();
-      setIsLoading(false);
-    }
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      if (!authenticated) {
+        router.push('/admin/login');
+      } else {
+        loadReviews();
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
   }, [router, activeTab]);
 
   const loadReviews = async () => {

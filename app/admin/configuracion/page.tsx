@@ -31,11 +31,15 @@ export default function AdminConfiguracion() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/admin/login');
-    } else {
-      loadConfig();
-    }
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      if (!authenticated) {
+        router.push('/admin/login');
+      } else {
+        loadConfig();
+      }
+    };
+    checkAuth();
   }, [router]);
 
   const loadConfig = async () => {

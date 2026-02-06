@@ -11,16 +11,19 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/admin/login');
-    } else {
-      setIsLoading(false);
-    }
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      if (!authenticated) {
+        router.push('/admin/login');
+      } else {
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
   }, [router]);
 
-  const handleLogout = () => {
-    logout();
-    router.push('/');
+  const handleLogout = async () => {
+    await logout();
   };
 
   if (isLoading) {

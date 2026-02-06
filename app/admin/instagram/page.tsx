@@ -28,11 +28,15 @@ export default function AdminInstagramPage() {
   });
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/admin/login');
-      return;
-    }
-    loadPosts();
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      if (!authenticated) {
+        router.push('/admin/login');
+        return;
+      }
+      loadPosts();
+    };
+    checkAuth();
   }, [router]);
 
   const loadPosts = async () => {

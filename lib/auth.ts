@@ -1,48 +1,44 @@
-// Sistema simple de autenticación para el admin
-// NOTA: Para producción, usa un sistema de autenticación real como NextAuth.js
+// Sistema de autenticación basado en cookies HTTP-only del servidor
+// Más seguro que localStorage ya que cada sesión es individual
 
-const ADMIN_PASSWORD = 'DulceHogar@2026VMT'; // Cambia esto por tu contraseña
-const AUTH_KEY = 'dulcehogar_admin_auth';
+export const login = async (password: string): Promise<boolean> => {
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
 
-export const login = (password: string): boolean => {
-  if (password === ADMIN_PASSWORD) {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(AUTH_KEY, 'authenticated');
-      // Expira en 24 horas
-      const expiry = Date.now() + (24 * 60 * 60 * 1000);
-      localStorage.setItem(AUTH_KEY + '_expiry', expiry.toString());
-    }
-    return true;
-  }
-  return false;
-};
-
-export const logout = () => {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem(AUTH_KEY);
-    localStorage.removeItem(AUTH_KEY + '_expiry');
-  }
-};
-
-export const isAuthenticated = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  
-  const auth = localStorage.getItem(AUTH_KEY);
-  const expiry = localStorage.getItem(AUTH_KEY + '_expiry');
-  
-  if (!auth || !expiry) return false;
-  
-  // Verificar si ha expirado
-  if (Date.now() > parseInt(expiry)) {
-    logout();
+    return response.ok;
+  } catch (error) {
+    console.error('Error en login:', error);
     return false;
   }
-  
-  return auth === 'authenticated';
 };
 
-export const requireAuth = (callback: () => void) => {
-  if (isAuthenticated()) {
+export const logout = async () => {
+  try {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    if (typeof window !== 'undefined') {
+      window.location.href = '/admin/login';
+    }
+  } catch (error) {
+    console.error('Error en logout:', error);
+  }
+};
+
+export const isAuthenticated = async (): Promise<boolean> => {
+  try {
+    const response = await fetch('/api/auth/check');
+    return response.ok;
+  } catch {
+    return false;
+  }
+};
+
+export const requireAuth = async (callback: () => void) => {
+  const authenticated = await isAuthenticated();
+  if (authenticated) {
     callback();
   } else {
     if (typeof window !== 'undefined') {

@@ -34,11 +34,15 @@ export default function AdminPromociones() {
   });
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/admin/login');
-    } else {
-      loadPromotions();
-    }
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      if (!authenticated) {
+        router.push('/admin/login');
+      } else {
+        loadPromotions();
+      }
+    };
+    checkAuth();
   }, [router]);
 
   const loadPromotions = async () => {

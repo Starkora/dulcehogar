@@ -25,11 +25,15 @@ export default function AdminGaleria() {
   });
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/admin/login');
-    } else {
-      loadImages();
-    }
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      if (!authenticated) {
+        router.push('/admin/login');
+      } else {
+        loadImages();
+      }
+    };
+    checkAuth();
   }, [router]);
 
   const loadImages = async () => {

@@ -14,13 +14,17 @@ export default function AdminEventos() {
   const [event, setEvent] = useState<SpecialEvent | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/admin/login');
-    } else {
-      const loadedEvent = getSpecialEvent();
-      setEvent(loadedEvent);
-      setIsLoading(false);
-    }
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      if (!authenticated) {
+        router.push('/admin/login');
+      } else {
+        const loadedEvent = getSpecialEvent();
+        setEvent(loadedEvent);
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
   }, [router]);
 
   const handleSave = () => {
