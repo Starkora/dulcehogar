@@ -180,7 +180,6 @@ localStorage.removeItem('dulcehogar-all-reviews');
 ### Ver Todas las Reseñas (Consola)
 ```javascript
 const reviews = JSON.parse(localStorage.getItem('dulcehogar-all-reviews'));
-console.log(reviews);
 ```
 
 ### Exportar Reseñas

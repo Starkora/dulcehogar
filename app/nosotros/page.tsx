@@ -84,32 +84,22 @@ export default function AboutPage() {
             <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
               Nuestro Equipo
             </h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               <div className="bg-white p-8 rounded-2xl shadow-lg text-center">
                 <div className="w-32 h-32 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <ChefHat className="w-16 h-16 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">María García</h3>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">María Camac</h3>
                 <p className="text-pink-500 font-semibold mb-3">Chef Pastelera</p>
                 <p className="text-gray-600">
-                  15 años de experiencia creando delicias
-                </p>
-              </div>
-              <div className="bg-white p-8 rounded-2xl shadow-lg text-center">
-                <div className="w-32 h-32 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Award className="w-16 h-16 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">Carlos Ruiz</h3>
-                <p className="text-pink-500 font-semibold mb-3">Decorador</p>
-                <p className="text-gray-600">
-                  Especialista en diseños personalizados
+                  +1 año de experiencia creando delicias
                 </p>
               </div>
               <div className="bg-white p-8 rounded-2xl shadow-lg text-center">
                 <div className="w-32 h-32 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <User className="w-16 h-16 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">Ana López</h3>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Eduardo Pérez</h3>
                 <p className="text-pink-500 font-semibold mb-3">Atención al Cliente</p>
                 <p className="text-gray-600">
                   Ayudándote a encontrar el postre perfecto

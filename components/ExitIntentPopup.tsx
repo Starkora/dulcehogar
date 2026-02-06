@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Gift, ArrowRight } from 'lucide-react';
+import { X, Gift, ArrowRight, Heart, Clock } from 'lucide-react';
 import { getSiteConfig } from '@/lib/siteConfig';
 
 export function ExitIntentPopup() {
@@ -53,60 +53,72 @@ export function ExitIntentPopup() {
   if (!isVisible || !config.exitPopup.enabled) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fadeIn">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full relative animate-slideUp">
+    <div className="fixed inset-0 bg-gradient-to-br from-pink-900/50 to-red-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+      <div className="bg-gradient-to-br from-white via-pink-50 to-red-50 rounded-3xl shadow-2xl max-w-md w-full relative animate-slideUp overflow-hidden">
+        {/* Decoración de corazones */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-red-200/30 rounded-full translate-y-12 -translate-x-12"></div>
+        
         <button
           onClick={() => setIsVisible(false)}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
           aria-label="Cerrar"
         >
           <X className="w-6 h-6" />
         </button>
 
-        <div className="p-8 text-center">
-          <div className="w-20 h-20 bg-gradient-to-br from-pink-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Gift className="w-10 h-10 text-pink-500" />
+        <div className="p-8 text-center relative z-10">
+          <div className="w-24 h-24 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <Heart className="w-12 h-12 text-white fill-current" />
           </div>
 
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <h2 className="text-4xl font-bold text-gray-900 mb-2">
             ¡Espera!
           </h2>
           
-          <p className="text-xl text-gray-700 mb-4">
-            Antes de irte...
+          <p className="text-xl text-gray-700 mb-4 font-semibold">
+            San Valentín se acerca...
           </p>
 
-          <div className="bg-gradient-to-br from-pink-50 to-orange-50 rounded-xl p-6 mb-6">
-            <p className="text-lg font-bold text-pink-600 mb-2">
-              Obtén {config.exitPopup.discount}% de Descuento
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-6 border-2 border-pink-200 shadow-lg">
+            <p className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-3">
+              {config.exitPopup.discount}% de Descuento Especial
             </p>
-            <p className="text-gray-700 mb-4">
-              En tu primer pedido. Usa el código:
+            <p className="text-gray-700 mb-4 font-medium flex items-center justify-center gap-2">
+              <Gift className="w-5 h-5 text-pink-500" />
+              Para tu pedido de San Valentín
             </p>
-            <div className="bg-white border-2 border-pink-300 rounded-lg px-4 py-3 mb-4">
-              <p className="text-2xl font-bold text-pink-600 tracking-wider">
+            <div className="bg-gradient-to-r from-pink-500 to-red-500 rounded-xl px-4 py-4 mb-4 shadow-md">
+              <p className="text-xs text-white/90 mb-1">Código promocional:</p>
+              <p className="text-3xl font-bold text-white tracking-wider">
                 {config.exitPopup.code}
               </p>
             </div>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
+              <Heart className="w-4 h-4 text-pink-500" />
               Válido en pedidos superiores a S/{config.exitPopup.minAmount}
+            </p>
+            <p className="text-xs text-pink-600 font-semibold mt-2 flex items-center justify-center gap-2">
+              <Clock className="w-4 h-4" />
+              ¡Pedidos hasta el 12 de Febrero!
             </p>
           </div>
 
           <a
-            href="https://api.whatsapp.com/send/?phone=51957076760&text=¡Hola!%20Quiero%20usar%20mi%20código%20DULCE10&type=phone_number&app_absent=0"
+            href={`https://api.whatsapp.com/send/?phone=51957076760&text=¡Hola!%20Quiero%20usar%20mi%20código%20${config.exitPopup.code}%20para%20San%20Valentín&type=phone_number&app_absent=0`}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setIsVisible(false)}
-            className="w-full bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 transform hover:scale-105"
           >
-            <span>Hacer mi Pedido Ahora</span>
+            <Heart className="w-5 h-5 fill-current" />
+            <span>Hacer mi Pedido Romántico</span>
             <ArrowRight className="w-5 h-5" />
           </a>
 
           <button
             onClick={() => setIsVisible(false)}
-            className="mt-4 text-sm text-gray-500 hover:text-gray-700"
+            className="mt-4 text-sm text-gray-500 hover:text-gray-700 transition-colors"
           >
             No gracias, seguir navegando
           </button>

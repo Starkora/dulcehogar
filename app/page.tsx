@@ -15,7 +15,7 @@ import { InstagramFeed } from '@/components/InstagramFeed';
 import { PhotoGallery } from '@/components/PhotoGallery';
 import { getApprovedReviews } from '@/lib/reviewModeration';
 import { getSiteConfig, getProducts, getPromotions, Product as SiteProduct } from '@/lib/siteConfig';
-import { Cake, Cookie, Award, HelpCircle, MessageCircle } from 'lucide-react';
+import { Cake, Cookie, Award, HelpCircle, MessageCircle, Heart, Clock } from 'lucide-react';
 
 interface Testimonial {
   name: string;
@@ -88,6 +88,61 @@ export default function Home() {
           </div>
         </section>
         )}
+
+        {/* San Valentín Banner Especial */}
+        <section className="py-20 px-4 bg-gradient-to-r from-pink-500 via-red-500 to-pink-500 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full animate-pulse"></div>
+            <div className="absolute bottom-10 right-10 w-40 h-40 bg-white rounded-full animate-pulse delay-75"></div>
+            <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-white rounded-full animate-pulse delay-150"></div>
+          </div>
+          
+          <div className="max-w-5xl mx-auto text-center relative z-10">
+            <Heart className="w-16 h-16 mx-auto mb-6 text-white fill-current animate-bounce" />
+            
+            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
+              San Valentín 2026
+            </h2>
+            
+            <p className="text-xl md:text-2xl text-white/90 mb-4 flex items-center justify-center gap-2">
+              <Heart className="w-6 h-6" />
+              Sorprende a tu pareja con nuestras creaciones especiales
+            </p>
+            
+            <p className="text-lg text-white/80 mb-8">
+              Combos románticos desde S/ 75 • Descuento especial 15% con código <span className="font-bold">AMOR2026</span>
+            </p>
+            
+            <div className="flex gap-4 justify-center flex-wrap mb-8">
+              <Link
+                href="/san-valentin"
+                className="bg-white hover:bg-gray-100 text-pink-500 px-8 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
+              >
+                <Heart className="w-5 h-5 fill-current" />
+                Ver Ofertas Especiales
+              </Link>
+              <a
+                href="https://api.whatsapp.com/send/?phone=51957076760&text=¡Hola!%20Quiero%20información%20sobre%20San%20Valentín&type=phone_number&app_absent=0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-pink-600 hover:bg-pink-700 text-white px-8 py-4 rounded-full text-lg font-semibold border-2 border-white transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
+              >
+                <MessageCircle className="w-5 h-5" />
+                Pedir por WhatsApp
+              </a>
+            </div>
+            
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 inline-block">
+              <p className="text-white font-semibold text-lg flex items-center justify-center gap-2">
+                <Clock className="w-5 h-5" />
+                ¡Solo hasta el 12 de Febrero!
+              </p>
+              <p className="text-white/90 text-sm mt-1">
+                Asegura tu pedido para el día más romántico del año
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* About Section */}
         {config.showAbout && (

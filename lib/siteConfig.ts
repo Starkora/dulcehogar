@@ -9,6 +9,9 @@ export interface Product {
   category?: string;
   isReferenceImage?: boolean;
   isApproximatePrice?: boolean;
+  unitType?: 'unidad' | 'paquete' | 'docena' | 'kilo' | 'porcion';
+  quantity?: number;
+  servings?: number;
 }
 
 export interface GalleryImage {
@@ -38,6 +41,43 @@ export interface InstagramPost {
   comments: number;
   caption: string;
   postUrl?: string;
+}
+
+export interface SpecialEvent {
+  id: string;
+  name: string;
+  isActive: boolean;
+  eventDate: string; // Fecha del evento (ej: "2026-02-14")
+  orderDeadline: string; // Fecha límite de pedidos (ej: "2026-02-12")
+  headerButton: {
+    show: boolean;
+    text: string;
+    url: string;
+  };
+  banner: {
+    show: boolean;
+    message: string;
+    description: string;
+    buttonText: string;
+  };
+  popup: {
+    show: boolean;
+    title: string;
+    description: string;
+    discount: number;
+    code: string;
+    minAmount: number;
+  };
+  combos: Array<{
+    id: string;
+    name: string;
+    description: string;
+    items: string[];
+    originalPrice: number;
+    discountedPrice: number;
+    servings: string;
+    popular?: boolean;
+  }>;
 }
 
 export interface SiteConfig {
@@ -85,20 +125,20 @@ const DEFAULT_CONFIG: SiteConfig = {
   showInstagram: true,
   urgencyBanner: {
     show: true,
-    message: '¡Última oportunidad! Pedidos para Año Nuevo hasta el 28 de Diciembre',
-    daysLeft: 363,
-    hoursLeft: 23
+    message: '¡San Valentín! Pedidos hasta el 12 de Febrero - ¡Sorprende a tu pareja!',
+    daysLeft: 7,
+    hoursLeft: 0
   },
   limitedSlotsAlert: {
     show: true,
-    slots: 3,
-    message: '¡Espacios Limitados Esta Semana!'
+    slots: 5,
+    message: '¡Solo 5 espacios disponibles para San Valentín!'
   },
   exitPopup: {
     enabled: true,
-    discount: 10,
-    code: 'DULCE10',
-    minAmount: 80
+    discount: 15,
+    code: 'AMOR2026',
+    minAmount: 50
   }
 };
 
@@ -216,6 +256,94 @@ export const updateSiteConfig = (updates: Partial<SiteConfig>) => {
   const config = getSiteConfig();
   const newConfig = { ...config, ...updates };
   saveSiteConfig(newConfig);
+};
+
+// Funciones para eventos especiales
+const DEFAULT_SPECIAL_EVENT: SpecialEvent = {
+  id: 'san-valentin-2026',
+  name: 'San Valentín 2026',
+  isActive: true,
+  eventDate: '2026-02-14',
+  orderDeadline: '2026-02-12',
+  headerButton: {
+    show: true,
+    text: 'San Valentín',
+    url: '/san-valentin'
+  },
+  banner: {
+    show: true,
+    message: 'SAN VALENTÍN 2026',
+    description: 'Sorprende a tu pareja con nuestras creaciones especiales. ¡Solo hasta el 12 de Febrero!',
+    buttonText: 'Ver Ofertas Especiales'
+  },
+  popup: {
+    show: true,
+    title: '¡San Valentín se acerca!',
+    description: 'Para tu pedido de San Valentín',
+    discount: 15,
+    code: 'AMOR2026',
+    minAmount: 50
+  },
+  combos: [
+    {
+      id: 'combo-clasico',
+      name: 'Amor Clásico',
+      description: 'Perfecto para comenzar',
+      items: ['6 Cupcakes decorados', '12 Galletas con mensaje', 'Tarjeta personalizada'],
+      originalPrice: 95,
+      discountedPrice: 75,
+      servings: 'Para 2 personas'
+    },
+    {
+      id: 'combo-premium',
+      name: 'Amor Premium',
+      description: '¡El más completo!',
+      items: ['Torta personalizada 1kg', '12 Cupcakes temáticos', '24 Galletas decoradas', 'Caja regalo premium'],
+      originalPrice: 180,
+      discountedPrice: 145,
+      servings: 'Para 4-6 personas',
+      popular: true
+    },
+    {
+      id: 'combo-deluxe',
+      name: 'Amor Deluxe',
+      description: 'Para una ocasión especial',
+      items: ['Torta personalizada 2kg', '18 Cupcakes premium', '36 Galletas artesanales', 'Caja premium + flores'],
+      originalPrice: 280,
+      discountedPrice: 225,
+      servings: 'Para 8-10 personas'
+    }
+  ]
+};
+
+export const getSpecialEvent = (): SpecialEvent | null => {
+  if (typeof window === 'undefined') return DEFAULT_SPECIAL_EVENT;
+  const saved = localStorage.getItem('dulcehogar_special_event');
+  if (!saved) return DEFAULT_SPECIAL_EVENT;
+  const event = JSON.parse(saved);
+  return event.isActive ? event : null;
+};
+
+export const saveSpecialEvent = (event: SpecialEvent) => {
+  localStorage.setItem('dulcehogar_special_event', JSON.stringify(event));
+};
+
+export const updateSpecialEvent = (updates: Partial<SpecialEvent>) => {
+  const event = getSpecialEvent();
+  if (event) {
+    const newEvent = { ...event, ...updates };
+    saveSpecialEvent(newEvent);
+    return newEvent;
+  }
+  return null;
+};
+
+export const deactivateSpecialEvent = () => {
+  const event = getSpecialEvent();
+  if (event) {
+    event.isActive = false;
+    saveSpecialEvent(event);
+  }
 };
 
 // Funciones para posts de Instagram

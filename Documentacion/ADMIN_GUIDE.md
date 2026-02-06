@@ -112,7 +112,7 @@ Se ha implementado un sistema completo de administración para tu sitio web que 
 
 ### Sin Reseñas
 Cuando no hay reseñas aprobadas, se muestra:
-- ❌ Ya NO hay testimoniales ficticios
+-  Ya NO hay testimoniales ficticios
 - ✅ Mensaje: "Aún no hay reseñas"
 - ✅ Botón destacado: "Dejar la Primera Reseña"
 - ✅ Diseño atractivo invitando a dejar opinión

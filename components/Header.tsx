@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Cake, Menu, X, Settings } from 'lucide-react';
+import { Cake, Menu, X, Settings, Heart } from 'lucide-react';
 import { isAuthenticated } from '@/lib/auth';
 
 export function Header() {
@@ -30,6 +30,13 @@ export function Header() {
               className="text-gray-700 hover:text-pink-500 font-semibold transition-colors"
             >
               Inicio
+            </Link>
+            <Link 
+              href="/san-valentin" 
+              className="text-white bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 px-4 py-2 rounded-full font-semibold transition-all shadow-md flex items-center gap-2 animate-pulse"
+            >
+              <Heart className="w-4 h-4 fill-current" />
+              San Valentín
             </Link>
             <Link 
               href="/productos" 
@@ -101,6 +108,14 @@ export function Header() {
               onClick={() => setIsMenuOpen(false)}
             >
               Inicio
+            </Link>
+            <Link 
+              href="/san-valentin" 
+              className="block text-white bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 px-6 py-3 rounded-xl font-semibold text-center shadow-lg flex items-center justify-center gap-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Heart className="w-5 h-5 fill-current" />
+              San Valentín 2026
             </Link>
             <Link 
               href="/productos" 

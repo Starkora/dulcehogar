@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Cake, Instagram, Facebook, MessageCircle, MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { Cake, Instagram, MessageCircle, MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { FaTiktok } from 'react-icons/fa';
 
 export function Footer() {
   return (
@@ -16,15 +17,15 @@ export function Footer() {
               Endulzando momentos especiales desde 2024
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors">
+              <a href="https://www.instagram.com/reposteriadulcehogarvmt_/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-pink-400 transition-colors">
                 <Instagram className="w-6 h-6" />
                 <span className="sr-only">Instagram</span>
               </a>
-              <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors">
-                <Facebook className="w-6 h-6" />
-                <span className="sr-only">Facebook</span>
+              <a href="https://www.tiktok.com/@dulcehogarvmt?lang=es-419" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-pink-400 transition-colors">
+                <FaTiktok className="w-6 h-6" />
+                <span className="sr-only">TikTok</span>
               </a>
-              <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors">
+              <a href="https://api.whatsapp.com/send/?phone=51957076760&text=¡Hola!%20Me%20gustaría%20hacer%20un%20pedido%20de%20Dulce%20Hogar&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-pink-400 transition-colors">
                 <MessageCircle className="w-6 h-6" />
                 <span className="sr-only">WhatsApp</span>
               </a>

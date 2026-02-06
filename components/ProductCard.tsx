@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Cake, Cookie, Dessert, ChevronDown, ChevronUp } from 'lucide-react';
+import { Cake, Cookie, Dessert, ChevronDown, ChevronUp, Users } from 'lucide-react';
 
 interface Product {
   id: number | string;
@@ -13,6 +13,9 @@ interface Product {
   category?: string;
   isReferenceImage?: boolean;
   isApproximatePrice?: boolean;
+  unitType?: 'unidad' | 'paquete' | 'docena' | 'kilo' | 'porcion';
+  quantity?: number;
+  servings?: number;
 }
 
 interface ProductCardProps {
@@ -114,6 +117,21 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-2xl font-bold text-pink-500">
               {formatPrice(product.price)}
             </span>
+            {product.unitType && (
+              <p className="text-sm text-gray-600 mt-1">
+                {product.unitType === 'unidad' && 'Por unidad'}
+                {product.unitType === 'paquete' && product.quantity && `Paquete de ${product.quantity} unidades`}
+                {product.unitType === 'docena' && 'Por docena (12 unidades)'}
+                {product.unitType === 'kilo' && product.quantity && `${product.quantity} kg`}
+                {product.unitType === 'porcion' && product.quantity && `${product.quantity} porciones`}
+              </p>
+            )}
+            {product.servings && (
+              <p className="text-sm text-pink-600 font-semibold mt-1 flex items-center gap-1">
+                <Users className="w-4 h-4" />
+                Para {product.servings} personas
+              </p>
+            )}
             {product.isApproximatePrice && (
               <p className="text-xs text-gray-500 mt-1">
                 Precio referencial*

@@ -24,7 +24,10 @@ export default function AdminProductos() {
     image: '',
     category: '',
     isReferenceImage: false,
-    isApproximatePrice: false
+    isApproximatePrice: false,
+    unitType: 'unidad' as 'unidad' | 'paquete' | 'docena' | 'kilo' | 'porcion',
+    quantity: 1,
+    servings: undefined as number | undefined
   });
 
   useEffect(() => {
@@ -92,7 +95,10 @@ export default function AdminProductos() {
       image: product.image,
       category: product.category || '',
       isReferenceImage: product.isReferenceImage || false,
-      isApproximatePrice: product.isApproximatePrice || false
+      isApproximatePrice: product.isApproximatePrice || false,
+      unitType: product.unitType || 'unidad',
+      quantity: product.quantity || 1,
+      servings: product.servings
     });
     setIsEditing(true);
   };
@@ -105,7 +111,7 @@ export default function AdminProductos() {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', description: '', price: 0, image: '', category: '', isReferenceImage: false, isApproximatePrice: false });
+    setFormData({ name: '', description: '', price: 0, image: '', category: '', isReferenceImage: false, isApproximatePrice: false, unitType: 'unidad', quantity: 1, servings: undefined });
     setEditingProduct(null);
     setIsEditing(false);
     setShowNewCategoryInput(false);
@@ -227,7 +233,7 @@ export default function AdminProductos() {
               />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Precio (S/) *
@@ -242,6 +248,76 @@ export default function AdminProductos() {
                   required
                 />
               </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Se vende por *
+                </label>
+                <select
+                  value={formData.unitType}
+                  onChange={(e) => setFormData({ ...formData, unitType: e.target.value as any })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  required
+                >
+                  <option value="unidad">Unidad</option>
+                  <option value="paquete">Paquete</option>
+                  <option value="docena">Docena</option>
+                  <option value="kilo">Kilo</option>
+                  <option value="porcion">Porción</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  {formData.unitType === 'kilo' ? 'Kilos' : 
+                   formData.unitType === 'paquete' ? 'Unidades en paquete' : 
+                   formData.unitType === 'porcion' ? 'Porciones' : 'Cantidad'} {formData.unitType !== 'unidad' && '*'}
+                </label>
+                <input
+                  type="number"
+                  value={formData.quantity}
+                  onChange={(e) => setFormData({ ...formData, quantity: Number(e.target.value) })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  min="1"
+                  step="0.5"
+                  placeholder={
+                    formData.unitType === 'kilo' ? 'ej: 1, 2.5, 5' :
+                    formData.unitType === 'paquete' ? 'ej: 6, 12, 24' :
+                    formData.unitType === 'porcion' ? 'ej: 8, 12, 16' :
+                    'ej: 1'
+                  }
+                  disabled={formData.unitType === 'unidad'}
+                  required={formData.unitType !== 'unidad'}
+                />
+                {formData.unitType === 'paquete' && formData.quantity > 1 && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Paquete de {formData.quantity} unidades
+                  </p>
+                )}
+                {formData.unitType === 'kilo' && formData.quantity > 0 && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Producto de {formData.quantity} kg
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Para cuántas personas (opcional)
+                </label>
+                <input
+                  type="number"
+                  value={formData.servings || ''}
+                  onChange={(e) => setFormData({ ...formData, servings: e.target.value ? Number(e.target.value) : undefined })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  min="1"
+                  step="1"
+                  placeholder="ej: 8, 12, 20"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Útil para tortas y postres
+                </p>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Imagen Referencial
@@ -346,7 +422,25 @@ export default function AdminProductos() {
                     <p className="text-sm text-pink-500 mb-2">{product.category}</p>
                   )}
                   <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
-                  <p className="text-2xl font-bold text-pink-500 mb-4">S/ {product.price}</p>
+                  <div className="mb-4">
+                    <p className="text-2xl font-bold text-pink-500">S/ {product.price}</p>
+                    {product.unitType && product.unitType !== 'unidad' && product.quantity && (
+                      <p className="text-sm text-gray-600">
+                        {product.unitType === 'paquete' && `Paquete de ${product.quantity} unidades`}
+                        {product.unitType === 'docena' && `Docena (12 unidades)`}
+                        {product.unitType === 'kilo' && `${product.quantity} kg`}
+                        {product.unitType === 'porcion' && `${product.quantity} porciones`}
+                      </p>
+                    )}
+                    {product.unitType === 'unidad' && (
+                      <p className="text-sm text-gray-600">Precio por unidad</p>
+                    )}
+                    {product.servings && (
+                      <p className="text-sm text-pink-600 font-semibold">
+                        Para {product.servings} personas
+                      </p>
+                    )}
+                  </div>
                   
                   <div className="flex gap-2">
                     <button

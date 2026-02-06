@@ -99,15 +99,6 @@ export default function AdminLogin() {
             </Link>
           </div>
         </div>
-
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <p className="text-sm text-blue-800">
-            <strong>Contraseña por defecto:</strong> dulcehogar2026
-          </p>
-          <p className="text-xs text-blue-600 mt-1">
-            Puedes cambiarla en el archivo <code>lib/auth.ts</code>
-          </p>
-        </div>
       </div>
     </div>
   );

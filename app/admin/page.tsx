@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Settings, Package, Image, Tag, Eye, ArrowLeft, LogOut, Instagram } from 'lucide-react';
+import { Settings, Package, Image, Tag, Eye, ArrowLeft, LogOut, Instagram, Calendar } from 'lucide-react';
 import { isAuthenticated, logout } from '@/lib/auth';
 
 export default function AdminDashboard() {
@@ -78,6 +78,25 @@ export default function AdminDashboard() {
             <p className="text-gray-600">
               Agrega, edita o elimina productos de tu catálogo
             </p>
+          </Link>
+
+          {/* Eventos Especiales */}
+          <Link
+            href="/admin/eventos"
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-all transform hover:scale-105 cursor-pointer border-2 border-pink-200"
+          >
+            <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-red-100 rounded-full flex items-center justify-center mb-4">
+              <Calendar className="w-8 h-8 text-red-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              Eventos Especiales
+            </h2>
+            <p className="text-gray-600">
+              Configura San Valentín, Navidad, etc.
+            </p>
+            <span className="inline-block mt-2 text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-full">
+              ¡NUEVO!
+            </span>
           </Link>
 
           {/* Galería */}

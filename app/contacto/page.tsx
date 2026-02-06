@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { MapPin, Phone, Mail, Clock, Instagram, Facebook, MessageCircle, CheckCircle, AlertCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Instagram, MessageCircle, CheckCircle, AlertCircle } from 'lucide-react';
+import { FaTiktok } from 'react-icons/fa';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -262,18 +263,22 @@ export default function ContactPage() {
                 </h3>
                 <div className="flex gap-4">
                   <a
-                    href="#"
+                    href="https://www.instagram.com/reposteriadulcehogarvmt_/"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex-1 bg-pink-100 hover:bg-pink-200 text-pink-600 py-3 rounded-xl font-semibold text-center transition-colors flex items-center justify-center gap-2"
                   >
                     <Instagram className="w-5 h-5" />
                     Instagram
                   </a>
                   <a
-                    href="#"
-                    className="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-600 py-3 rounded-xl font-semibold text-center transition-colors flex items-center justify-center gap-2"
+                    href="https://www.tiktok.com/@dulcehogarvmt?lang=es-419"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-gray-800 hover:bg-gray-900 text-white py-3 rounded-xl font-semibold text-center transition-colors flex items-center justify-center gap-2"
                   >
-                    <Facebook className="w-5 h-5" />
-                    Facebook
+                    <FaTiktok className="w-5 h-5" />
+                    TikTok
                   </a>
                   <a
                     href="https://api.whatsapp.com/send/?phone=51957076760&text=¡Hola!%20Me%20gustaría%20hacer%20un%20pedido%20de%20Dulce%20Hogar&type=phone_number&app_absent=0"
