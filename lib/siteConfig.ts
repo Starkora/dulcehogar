@@ -14,6 +14,21 @@ export interface Product {
   servings?: number;
 }
 
+export interface EventProduct {
+  id: string;
+  eventId: string;
+  name: string;
+  description: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  unitType: 'unidad' | 'paquete' | 'docena' | 'kilo' | 'porcion';
+  quantity?: number;
+  servings?: number;
+  status: 'active' | 'inactive' | 'archived';
+  displayOrder?: number;
+}
+
 export interface GalleryImage {
   id: string;
   url: string;
@@ -176,6 +191,56 @@ export const updateProduct = (id: string, updates: Partial<Product>) => {
 export const deleteProduct = (id: string) => {
   const products = getProducts().filter(p => p.id !== id);
   saveProducts(products);
+};
+
+// Funciones para productos de eventos
+export const getEventProducts = (eventId?: string): EventProduct[] => {
+  if (typeof window === 'undefined') return [];
+  const saved = localStorage.getItem('dulcehogar_event_products');
+  const allProducts = saved ? JSON.parse(saved) : [];
+  
+  if (eventId) {
+    return allProducts.filter((p: EventProduct) => p.eventId === eventId && p.status === 'active');
+  }
+  return allProducts;
+};
+
+export const saveEventProducts = (products: EventProduct[]) => {
+  localStorage.setItem('dulcehogar_event_products', JSON.stringify(products));
+};
+
+export const addEventProduct = (product: Omit<EventProduct, 'id'>) => {
+  const products = getEventProducts();
+  const newProduct: EventProduct = {
+    ...product,
+    id: `ev-prod-${Date.now()}`,
+    status: 'active'
+  };
+  products.push(newProduct);
+  saveEventProducts(products);
+  return newProduct;
+};
+
+export const updateEventProduct = (id: string, updates: Partial<EventProduct>) => {
+  const products = getEventProducts();
+  const index = products.findIndex(p => p.id === id);
+  if (index !== -1) {
+    products[index] = { ...products[index], ...updates };
+    saveEventProducts(products);
+  }
+};
+
+export const deleteEventProduct = (id: string) => {
+  // No elimina realmente, solo cambia el estado a 'inactive'
+  updateEventProduct(id, { status: 'inactive' });
+};
+
+export const archiveEventProduct = (id: string) => {
+  updateEventProduct(id, { status: 'archived' });
+};
+
+export const reactivateEventProduct = (id: string, newEventId: string) => {
+  updateEventProduct(id, { status: 'active', eventId: newEventId });
 };
 
 // Funciones para galería
