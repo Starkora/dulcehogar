@@ -17,11 +17,17 @@ export function ExitIntentPopup() {
       return;
     }
 
-    // Verificar si ya se mostró antes
-    const shown = sessionStorage.getItem('exit-popup-shown');
-    if (shown) {
-      setHasShown(true);
-      return;
+    // Verificar si ya se mostró antes y si no ha expirado (7 días)
+    const popupData = localStorage.getItem('exit-popup-shown');
+    if (popupData) {
+      const { timestamp } = JSON.parse(popupData);
+      const daysPassed = (Date.now() - timestamp) / (1000 * 60 * 60 * 24);
+      
+      // Si han pasado menos de 7 días, no mostrar
+      if (daysPassed < 7) {
+        setHasShown(true);
+        return;
+      }
     }
 
     // Para desktop: detectar cuando el mouse sale por arriba
@@ -29,7 +35,7 @@ export function ExitIntentPopup() {
       if (e.clientY <= 0 && !hasShown) {
         setIsVisible(true);
         setHasShown(true);
-        sessionStorage.setItem('exit-popup-shown', 'true');
+        localStorage.setItem('exit-popup-shown', JSON.stringify({ timestamp: Date.now() }));
       }
     };
 
@@ -38,7 +44,7 @@ export function ExitIntentPopup() {
       if (!hasShown) {
         setIsVisible(true);
         setHasShown(true);
-        sessionStorage.setItem('exit-popup-shown', 'true');
+        localStorage.setItem('exit-popup-shown', JSON.stringify({ timestamp: Date.now() }));
       }
     }, 5000);
 
@@ -61,8 +67,9 @@ export function ExitIntentPopup() {
         
         <button
           onClick={() => setIsVisible(false)}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-50 cursor-pointer bg-white/80 rounded-full p-1 hover:bg-white"
           aria-label="Cerrar"
+          type="button"
         >
           <X className="w-6 h-6" />
         </button>
@@ -118,7 +125,8 @@ export function ExitIntentPopup() {
 
           <button
             onClick={() => setIsVisible(false)}
-            className="mt-4 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            className="mt-4 text-sm text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
+            type="button"
           >
             No gracias, seguir navegando
           </button>

@@ -13,9 +13,10 @@ import { UrgencyBanner, PromoCard, LimitedSlotsAlert, SeasonalPromo } from '@/co
 import { ExitIntentPopup } from '@/components/ExitIntentPopup';
 import { InstagramFeed } from '@/components/InstagramFeed';
 import { PhotoGallery } from '@/components/PhotoGallery';
+import { ProductCarousel } from '@/components/ProductCarousel';
 import { getApprovedReviews } from '@/lib/reviewModeration';
-import { getSiteConfig, getProducts, getPromotions, Product as SiteProduct } from '@/lib/siteConfig';
-import { Cake, Cookie, Award, HelpCircle, MessageCircle, Heart, Clock } from 'lucide-react';
+import { getProducts, getPromotions, Product as SiteProduct } from '@/lib/siteConfig';
+import { Cake, Cookie, Award, HelpCircle, MessageCircle, Heart, Clock, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
 interface Testimonial {
   name: string;
@@ -28,22 +29,79 @@ interface Testimonial {
 export default function Home() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const [config, setConfig] = useState(getSiteConfig());
+  const [config, setConfig] = useState<any>({ urgencyBanner: { show: false } });
   const [products, setProducts] = useState<SiteProduct[]>(getProducts());
   const [promotions, setPromotions] = useState(getPromotions());
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [reviewsPerPage, setReviewsPerPage] = useState(3);
+  const [showPromoBanner, setShowPromoBanner] = useState(true);
+  const [activePromotionsFromDB, setActivePromotionsFromDB] = useState<any[]>([]);
 
-  // Cargar solo reseñas aprobadas (sin testimoniales por defecto)
-  const loadApprovedReviews = () => {
-    const approved = getApprovedReviews();
-    setTestimonials(approved);
+  // Cargar solo reseñas aprobadas desde la base de datos
+  const loadApprovedReviews = async () => {
+    try {
+      const response = await fetch('/api/reviews?status=approved');
+      const data = await response.json();
+      
+      // Verificar que la respuesta sea un array
+      if (Array.isArray(data)) {
+        setTestimonials(data);
+      } else {
+        console.error('Invalid reviews data:', data);
+        setTestimonials([]);
+      }
+    } catch (error) {
+      console.error('Error loading reviews:', error);
+      setTestimonials([]);
+    }
+  };
+
+  const loadSiteConfig = async () => {
+    try {
+      const response = await fetch('/api/site-config');
+      const data = await response.json();
+      setConfig({
+        ...data,
+        urgencyBanner: data.urgencyBanner || { show: false }
+      });
+    } catch (error) {
+      console.error('Error loading site config:', error);
+    }
+  };
+
+  const loadActivePromotions = async () => {
+    try {
+      const response = await fetch('/api/promotions');
+      const data = await response.json();
+      const actives = data.filter((p: any) => p.isActive);
+      setActivePromotionsFromDB(actives);
+    } catch (error) {
+      console.error('Error loading promotions:', error);
+    }
   };
 
   // Load testimonials and config on mount
   useEffect(() => {
     loadApprovedReviews();
-    setConfig(getSiteConfig());
+    loadSiteConfig();
+    loadActivePromotions();
     setProducts(getProducts());
     setPromotions(getPromotions());
+    
+    // Ajustar reseñas por página según el tamaño de pantalla
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setReviewsPerPage(1);
+      } else if (window.innerWidth < 1024) {
+        setReviewsPerPage(2);
+      } else {
+        setReviewsPerPage(3);
+      }
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleNewReview = () => {
@@ -52,42 +110,92 @@ export default function Home() {
     setShowReviewForm(false);
   };
 
+  const nextReview = () => {
+    if (currentReviewIndex + reviewsPerPage < testimonials.length) {
+      setCurrentReviewIndex(currentReviewIndex + reviewsPerPage);
+    }
+  };
+
+  const prevReview = () => {
+    if (currentReviewIndex > 0) {
+      setCurrentReviewIndex(Math.max(0, currentReviewIndex - reviewsPerPage));
+    }
+  };
+
+  const visibleReviews = testimonials.slice(currentReviewIndex, currentReviewIndex + reviewsPerPage);
+  const hasMoreReviews = currentReviewIndex + reviewsPerPage < testimonials.length;
+  const hasPrevReviews = currentReviewIndex > 0;
+
   const activePromotions = promotions.filter(p => p.isActive);
 
   return (
     <>
-      {config.urgencyBanner.show && <UrgencyBanner />}
+      {config.urgencyBanner?.show && <UrgencyBanner />}
       <Header />
+      
+      {/* Banner flotante de promoción */}
+      {showPromoBanner && activePromotionsFromDB.length > 0 && (
+        <div className="fixed top-20 right-4 z-99990 max-w-sm animate-slide-in-right">
+          <div className="bg-gradient-to-br from-pink-500 to-red-500 text-white rounded-xl shadow-2xl p-6 relative">
+            <button
+              onClick={() => setShowPromoBanner(false)}
+              className="absolute top-3 right-3 text-white hover:text-gray-200 transition-colors cursor-pointer"
+              aria-label="Cerrar"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <div className="mb-4">
+              <span className="inline-flex items-center gap-1 bg-white text-pink-500 text-xs font-bold px-3 py-1 rounded-full mb-3">
+                <Sparkles className="w-3 h-3" />
+                PROMOCIÓN ESPECIAL
+              </span>
+              <h3 className="text-xl font-bold mb-2">{activePromotionsFromDB[0].title}</h3>
+              <p className="text-white/90 text-sm mb-3">{activePromotionsFromDB[0].description}</p>
+              
+              {activePromotionsFromDB[0].discountPercent > 0 && (
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 mb-3">
+                  <p className="text-2xl font-bold">{activePromotionsFromDB[0].discountPercent}% OFF</p>
+                  {activePromotionsFromDB[0].code && (
+                    <p className="text-sm mt-1">Código: <span className="font-bold">{activePromotionsFromDB[0].code}</span></p>
+                  )}
+                  {activePromotionsFromDB[0].validUntil && (
+                    <p className="text-xs mt-1 text-white/80">Válido hasta: {activePromotionsFromDB[0].validUntil}</p>
+                  )}
+                </div>
+              )}
+            </div>
+            
+            <div className="flex gap-2">
+              <a
+                href="https://api.whatsapp.com/send/?phone=51957076760&text=¡Hola!%20Quiero%20aprovechar%20la%20promoción&type=phone_number&app_absent=0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-white hover:bg-gray-100 text-pink-500 px-4 py-2 rounded-lg font-semibold text-center transition-all cursor-pointer"
+              >
+                Aprovechar
+              </a>
+              {activePromotionsFromDB.length > 1 && (
+                <Link
+                  href="#promociones"
+                  onClick={() => setShowPromoBanner(false)}
+                  className="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg font-medium transition-all cursor-pointer text-sm"
+                >
+                  Ver más
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      
       <WhatsAppButton />
       <ExitIntentPopup />
       <main className="min-h-screen">
-        {/* Hero Section */}
-        {config.showHero && (
-        <section className="relative h-[600px] flex items-center justify-center bg-gradient-to-br from-pink-50 to-orange-50">
-          <div className="relative z-10 text-center px-4">
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6">
-              Dulce Hogar
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Endulzando momentos especiales con amor y dedicación artesanal
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Link 
-                href="/productos" 
-                className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
-              >
-                Ver Productos
-              </Link>
-              <Link 
-                href="/contacto" 
-                className="bg-white hover:bg-gray-50 text-pink-500 px-8 py-4 rounded-full text-lg font-semibold border-2 border-pink-500 transition-all transform hover:scale-105 shadow-lg"
-              >
-                Contactar
-              </Link>
-            </div>
-          </div>
-        </section>
-        )}
+        {/* Hero Section con Carrusel de Productos */}
+        {config.showHero && <ProductCarousel />}
 
         {/* San Valentín Banner Especial */}
         <section className="py-20 px-4 bg-gradient-to-r from-pink-500 via-red-500 to-pink-500 relative overflow-hidden">
@@ -368,10 +476,52 @@ export default function Home() {
               </div>
             ) : (
               <>
-                <div className="grid md:grid-cols-3 gap-8 mb-12">
-                  {testimonials.slice(0, 6).map((testimonial, index) => (
-                    <TestimonialCard key={index} {...testimonial} />
-                  ))}
+                {/* Carrusel de Reseñas */}
+                <div className="relative mb-12">
+                  {/* Botón anterior */}
+                  {hasPrevReviews && (
+                    <button
+                      onClick={prevReview}
+                      className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-pink-50 transition-all group"
+                      aria-label="Reseña anterior"
+                    >
+                      <ChevronLeft className="w-6 h-6 text-gray-600 group-hover:text-pink-500" />
+                    </button>
+                  )}
+
+                  {/* Grid de reseñas visibles */}
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-8">
+                    {visibleReviews.map((testimonial, index) => (
+                      <TestimonialCard key={currentReviewIndex + index} {...testimonial} />
+                    ))}
+                  </div>
+
+                  {/* Botón siguiente */}
+                  {hasMoreReviews && (
+                    <button
+                      onClick={nextReview}
+                      className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-pink-50 transition-all group"
+                      aria-label="Siguiente reseña"
+                    >
+                      <ChevronRight className="w-6 h-6 text-gray-600 group-hover:text-pink-500" />
+                    </button>
+                  )}
+
+                  {/* Indicadores */}
+                  <div className="flex justify-center gap-2 mt-8">
+                    {Array.from({ length: Math.ceil(testimonials.length / reviewsPerPage) }).map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentReviewIndex(i * reviewsPerPage)}
+                        className={`h-2 rounded-full transition-all ${
+                          Math.floor(currentReviewIndex / reviewsPerPage) === i
+                            ? 'w-8 bg-pink-500'
+                            : 'w-2 bg-gray-300 hover:bg-pink-300'
+                        }`}
+                        aria-label={`Ir a página ${i + 1}`}
+                      />
+                    ))}
+                  </div>
                 </div>
 
                 {/* Review Form Toggle */}

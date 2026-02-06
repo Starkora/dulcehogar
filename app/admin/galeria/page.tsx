@@ -4,9 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Trash2, Image as ImageIcon } from 'lucide-react';
-import { GalleryImage, getGalleryImages, addGalleryImage, deleteGalleryImage } from '@/lib/siteConfig';
 import { isAuthenticated } from '@/lib/auth';
 import { ImageUpload } from '@/components/ImageUpload';
+
+interface GalleryImage {
+  id: string;
+  url: string;
+  alt: string;
+  category?: string;
+}
 
 export default function AdminGaleria() {
   const router = useRouter();
@@ -22,10 +28,23 @@ export default function AdminGaleria() {
     if (!isAuthenticated()) {
       router.push('/admin/login');
     } else {
-      setImages(getGalleryImages());
-      setIsLoading(false);
+      loadImages();
     }
   }, [router]);
+
+  const loadImages = async () => {
+    try {
+      const response = await fetch('/api/gallery');
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setImages(data);
+      }
+    } catch (error) {
+      console.error('Error loading images:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -38,17 +57,33 @@ export default function AdminGaleria() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    addGalleryImage(formData);
-    setImages(getGalleryImages());
-    setFormData({ url: '', title: '', category: 'Todas' });
+    try {
+      await fetch('/api/gallery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: formData.url, alt: formData.title, category: formData.category }),
+      });
+      await loadImages();
+      setFormData({ url: '', title: '', category: 'Todas' });
+    } catch (error) {
+      console.error('Error adding image:', error);
+      alert('Error al agregar imagen');
+    }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('¿Estás seguro de eliminar esta imagen?')) {
-      deleteGalleryImage(id);
-      setImages(getGalleryImages());
+      try {
+        await fetch(`/api/gallery?id=${id}`, {
+          method: 'DELETE',
+        });
+        await loadImages();
+      } catch (error) {
+        console.error('Error deleting image:', error);
+        alert('Error al eliminar imagen');
+      }
     }
   };
 
@@ -150,13 +185,13 @@ export default function AdminGaleria() {
                   <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                     <img 
                       src={image.url} 
-                      alt={image.title} 
+                      alt={image.alt} 
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all rounded-lg flex flex-col items-center justify-center opacity-0 group-hover:opacity-100">
                     <p className="text-white font-semibold text-sm text-center px-2 mb-2">
-                      {image.title}
+                      {image.alt}
                     </p>
                     <span className="text-xs text-pink-300 mb-3">{image.category}</span>
                     <button

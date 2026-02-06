@@ -4,8 +4,17 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Edit, Trash2, Save, X, ToggleLeft, ToggleRight } from 'lucide-react';
-import { Promotion, getPromotions, addPromotion, updatePromotion, deletePromotion } from '@/lib/siteConfig';
 import { isAuthenticated } from '@/lib/auth';
+
+interface Promotion {
+  id: string;
+  title: string;
+  description: string;
+  discountPercent?: number;
+  code?: string;
+  validUntil?: string;
+  isActive: boolean;
+}
 
 export default function AdminPromociones() {
   const router = useRouter();
@@ -13,15 +22,14 @@ export default function AdminPromociones() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editingPromotion, setEditingPromotion] = useState<Promotion | null>(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    type: 'discount' as 'discount' | 'seasonal',
     title: '',
     description: '',
-    discount: 0,
+    discountPercent: 0,
     code: '',
     validUntil: '',
-    ctaText: '',
-    ctaLink: '/contacto',
     isActive: true
   });
 
@@ -29,10 +37,23 @@ export default function AdminPromociones() {
     if (!isAuthenticated()) {
       router.push('/admin/login');
     } else {
-      setPromotions(getPromotions());
-      setIsLoading(false);
+      loadPromotions();
     }
   }, [router]);
+
+  const loadPromotions = async () => {
+    try {
+      const response = await fetch('/api/promotions');
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setPromotions(data);
+      }
+    } catch (error) {
+      console.error('Error loading promotions:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -45,57 +66,93 @@ export default function AdminPromociones() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (editingPromotion) {
-      updatePromotion(editingPromotion.id, formData);
-    } else {
-      addPromotion(formData);
+    try {
+      let response;
+      if (editingPromotion) {
+        response = await fetch('/api/promotions', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: editingPromotion.id, ...formData }),
+        });
+      } else {
+        response = await fetch('/api/promotions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+      }
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+        alert(`Error: ${errorData.error || 'No se pudo guardar la promoción'}`);
+        return;
+      }
+      
+      await loadPromotions();
+      resetForm();
+      setSuccessMessage(editingPromotion ? 'Promoción actualizada correctamente' : 'Promoción creada correctamente');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      console.error('Error saving promotion:', error);
+      alert('Error al guardar la promoción: ' + error);
     }
-    
-    setPromotions(getPromotions());
-    resetForm();
   };
 
   const handleEdit = (promotion: Promotion) => {
     setEditingPromotion(promotion);
     setFormData({
-      type: promotion.type,
       title: promotion.title,
       description: promotion.description,
-      discount: promotion.discount || 0,
+      discountPercent: promotion.discountPercent || 0,
       code: promotion.code || '',
       validUntil: promotion.validUntil || '',
-      ctaText: promotion.ctaText,
-      ctaLink: promotion.ctaLink,
       isActive: promotion.isActive
     });
     setIsEditing(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('¿Estás seguro de eliminar esta promoción?')) {
-      deletePromotion(id);
-      setPromotions(getPromotions());
+  const handleDelete = async (id: string) => {
+    try {
+      await fetch(`/api/promotions?id=${id}`, {
+        method: 'DELETE',
+      });
+      await loadPromotions();
+      setDeleteConfirmId(null);
+      setSuccessMessage('Promoción eliminada correctamente');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      console.error('Error deleting promotion:', error);
+      alert('Error al eliminar la promoción');
     }
   };
 
-  const toggleActive = (id: string, currentStatus: boolean) => {
-    updatePromotion(id, { isActive: !currentStatus });
-    setPromotions(getPromotions());
+  const toggleActive = async (id: string, currentStatus: boolean) => {
+    try {
+      const promo = promotions.find(p => p.id === id);
+      if (promo) {
+        await fetch('/api/promotions', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...promo, isActive: !currentStatus }),
+        });
+        await loadPromotions();
+      }
+    } catch (error) {
+      console.error('Error toggling promotion:', error);
+    }
   };
 
   const resetForm = () => {
     setFormData({
-      type: 'discount',
       title: '',
       description: '',
-      discount: 0,
+      discountPercent: 0,
       code: '',
       validUntil: '',
-      ctaText: '',
-      ctaLink: '/contacto',
       isActive: true
     });
     setEditingPromotion(null);
@@ -105,6 +162,40 @@ export default function AdminPromociones() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-orange-50 py-12 px-4">
       <div className="max-w-7xl mx-auto">
+        {/* Modal de confirmación de eliminación */}
+        {deleteConfirmId && (
+          <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+            <div className="bg-white rounded-xl p-6 shadow-2xl border-2 border-red-200 max-w-sm w-full animate-scale-in">
+              <h3 className="text-lg font-bold text-gray-800 mb-2">¿Eliminar promoción?</h3>
+              <p className="text-gray-600 text-sm mb-4">Esta acción no se puede deshacer.</p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-all cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => handleDelete(deleteConfirmId)}
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all cursor-pointer"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mensaje de éxito */}
+        {successMessage && (
+          <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-slide-in-right">
+            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+              <span className="text-green-500 text-xl font-bold">✓</span>
+            </div>
+            <span className="font-semibold">{successMessage}</span>
+          </div>
+        )}
+
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold text-gray-800 mb-2">
@@ -140,34 +231,18 @@ export default function AdminPromociones() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Tipo de Promoción *
-                </label>
-                <select
-                  value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value as 'discount' | 'seasonal' })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                >
-                  <option value="discount">Descuento</option>
-                  <option value="seasonal">Especial/Temporada</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Título *
-                </label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  placeholder="Ej: 15% de Descuento"
-                  required
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Título *
+              </label>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                placeholder="Ej: 15% de Descuento"
+                required
+              />
             </div>
 
             <div>
@@ -183,7 +258,7 @@ export default function AdminPromociones() {
               />
             </div>
 
-            {formData.type === 'discount' && (
+            {formData.discountPercent > 0 && (
               <div className="grid md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -191,8 +266,8 @@ export default function AdminPromociones() {
                   </label>
                   <input
                     type="number"
-                    value={formData.discount}
-                    onChange={(e) => setFormData({ ...formData, discount: Number(e.target.value) })}
+                    value={formData.discountPercent}
+                    onChange={(e) => setFormData({ ...formData, discountPercent: Number(e.target.value) })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     min="0"
                     max="100"
@@ -227,36 +302,6 @@ export default function AdminPromociones() {
               </div>
             )}
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Texto del Botón *
-                </label>
-                <input
-                  type="text"
-                  value={formData.ctaText}
-                  onChange={(e) => setFormData({ ...formData, ctaText: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  placeholder="Reclamar Descuento"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Enlace del Botón *
-                </label>
-                <input
-                  type="text"
-                  value={formData.ctaLink}
-                  onChange={(e) => setFormData({ ...formData, ctaLink: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  placeholder="/contacto"
-                  required
-                />
-              </div>
-            </div>
-
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
@@ -272,7 +317,7 @@ export default function AdminPromociones() {
 
             <button
               type="submit"
-              className="w-full bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2"
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 transform hover:scale-[1.02] hover:shadow-xl cursor-pointer"
             >
               {editingPromotion ? <Save className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
               {editingPromotion ? 'Guardar Cambios' : 'Crear Promoción'}
@@ -299,11 +344,6 @@ export default function AdminPromociones() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-bold text-gray-800 text-xl">{promo.title}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          promo.type === 'discount' ? 'bg-orange-100 text-orange-700' : 'bg-purple-100 text-purple-700'
-                        }`}>
-                          {promo.type === 'discount' ? 'Descuento' : 'Especial'}
-                        </span>
                         <button
                           onClick={() => toggleActive(promo.id, promo.isActive)}
                           className="flex items-center gap-1"
@@ -326,22 +366,19 @@ export default function AdminPromociones() {
                           <span className="font-semibold">Válido hasta:</span> {promo.validUntil}
                         </p>
                       )}
-                      <p className="text-sm text-gray-700 mt-1">
-                        <span className="font-semibold">Botón:</span> {promo.ctaText} → {promo.ctaLink}
-                      </p>
                     </div>
 
                     <div className="flex gap-2 ml-4">
                       <button
                         onClick={() => handleEdit(promo)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2"
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 transform hover:scale-105 hover:shadow-lg cursor-pointer"
                       >
                         <Edit className="w-4 h-4" />
                         Editar
                       </button>
                       <button
-                        onClick={() => handleDelete(promo.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2"
+                        onClick={() => setDeleteConfirmId(promo.id)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 transform hover:scale-105 hover:shadow-lg cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                         Eliminar

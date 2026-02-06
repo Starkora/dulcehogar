@@ -7,9 +7,29 @@ import { getSiteConfig } from '@/lib/siteConfig';
 export function UrgencyBanner() {
   const [isVisible, setIsVisible] = useState(true);
   const [config, setConfig] = useState(getSiteConfig());
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
 
   useEffect(() => {
     setConfig(getSiteConfig());
+    
+    // Calcular tiempo restante hasta el 12 de febrero 2026 23:59:59
+    const calculateTimeLeft = () => {
+      const deadline = new Date('2026-02-12T23:59:59').getTime();
+      const now = new Date().getTime();
+      const difference = deadline - now;
+
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeLeft({ days, hours, minutes });
+      }
+    };
+
+    calculateTimeLeft();
+    const interval = setInterval(calculateTimeLeft, 60000); // Actualizar cada minuto
+
+    return () => clearInterval(interval);
   }, []);
 
   if (!isVisible || !config.urgencyBanner.show) return null;
@@ -25,8 +45,9 @@ export function UrgencyBanner() {
               {config.urgencyBanner.message}
             </p>
             <p className="text-xs md:text-sm opacity-90">
-              Solo quedan <span className="font-bold">{config.urgencyBanner.daysLeft}</span> días,{' '}
-              <span className="font-bold">{config.urgencyBanner.hoursLeft}</span> horas
+              Solo quedan <span className="font-bold">{timeLeft.days}</span> días,{' '}
+              <span className="font-bold">{timeLeft.hours}</span> horas,{' '}
+              <span className="font-bold">{timeLeft.minutes}</span> minutos
             </p>
           </div>
         </div>

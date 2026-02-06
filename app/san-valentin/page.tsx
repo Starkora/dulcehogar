@@ -11,10 +11,37 @@ import { getProducts } from '@/lib/siteConfig';
 
 export default function SanValentinPage() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
-  const [products, setProducts] = useState(getProducts());
+  const [products, setProducts] = useState<any[]>([]);
+  const [eventProducts, setEventProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setProducts(getProducts());
+    // Fetch regular products
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error loading products:', error);
+      }
+    };
+
+    // Fetch event products
+    const fetchEventProducts = async () => {
+      try {
+        const response = await fetch('/api/event-products?eventId=san-valentin-2026');
+        const data = await response.json();
+        setEventProducts(data);
+      } catch (error) {
+        console.error('Error loading event products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+    fetchEventProducts();
     
     // Countdown to Valentine's Day
     const valentineDay = new Date('2026-02-14T23:59:59');
@@ -167,7 +194,7 @@ export default function SanValentinPage() {
 
                 <button
                   onClick={() => handleOrderCombo('Amor Clásico', 'S/ 75')}
-                  className="w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <MessageCircle className="w-5 h-5" />
                   Ordenar Ahora
@@ -222,7 +249,7 @@ export default function SanValentinPage() {
 
                 <button
                   onClick={() => handleOrderCombo('Amor Premium', 'S/ 145')}
-                  className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg"
+                  className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer"
                 >
                   <MessageCircle className="w-5 h-5" />
                   Ordenar Ahora
@@ -270,7 +297,7 @@ export default function SanValentinPage() {
 
                 <button
                   onClick={() => handleOrderCombo('Amor Deluxe', 'S/ 225')}
-                  className="w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <MessageCircle className="w-5 h-5" />
                   Ordenar Ahora
@@ -294,9 +321,31 @@ export default function SanValentinPage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                Productos Individuales
+                Productos Exclusivos de San Valentín
               </h2>
               <p className="text-xl text-gray-600">
+                Productos especiales solo disponibles para esta fecha
+              </p>
+            </div>
+
+            {loading ? (
+              <div className="text-center py-16">
+                <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="text-gray-600">Cargando productos...</p>
+              </div>
+            ) : eventProducts.length > 0 ? (
+              <div className="grid md:grid-cols-3 gap-8 mb-16">
+                {eventProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            ) : null}
+
+            <div className="text-center mb-8 mt-16">
+              <h3 className="text-3xl font-bold text-gray-800 mb-2">
+                Productos Regulares
+              </h3>
+              <p className="text-lg text-gray-600">
                 Arma tu propio combo personalizado
               </p>
             </div>

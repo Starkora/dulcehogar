@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Star, Send, AlertCircle, CheckCircle } from 'lucide-react';
-import { addReview, getBrowserFingerprint } from '@/lib/reviewModeration';
 
 interface ReviewFormProps {
   onSubmit: () => void;
@@ -26,23 +25,30 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
       return;
     }
 
+    if (comment.length < 15) {
+      setMessage({ type: 'error', text: 'El comentario debe tener al menos 15 caracteres' });
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      const result = addReview({
-        name: name.trim(),
-        rating,
-        comment: comment.trim(),
-        event,
-        date: new Date().toLocaleDateString('es-CO', { 
-          day: 'numeric', 
-          month: 'short', 
-          year: 'numeric' 
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          rating,
+          comment: comment.trim(),
+          event,
         }),
-        ipHash: getBrowserFingerprint()
       });
+
+      const result = await response.json();
       
-      if (result.success) {
+      if (response.ok) {
         // Reset form
         setName('');
         setRating(5);
@@ -50,16 +56,16 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
         setEvent('');
         
         setMessage({ 
-          type: result.needsModeration ? 'warning' : 'success', 
-          text: result.message 
+          type: 'warning',
+          text: '¡Gracias por tu reseña! Será publicada después de ser revisada por nuestro equipo.' 
         });
         
         // Notificar al componente padre para refrescar
         setTimeout(() => {
           onSubmit();
-        }, 2000);
+        }, 3000);
       } else {
-        setMessage({ type: 'error', text: result.message });
+        setMessage({ type: 'error', text: result.error || 'Error al enviar la reseña' });
       }
     } catch (error) {
       setMessage({ type: 'error', text: 'Error al enviar la reseña. Por favor intenta nuevamente.' });

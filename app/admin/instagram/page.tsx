@@ -5,8 +5,15 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, Instagram, Trash2, Edit2, Save, X } from 'lucide-react';
 import Link from 'next/link';
 import { isAuthenticated } from '@/lib/auth';
-import { getInstagramPosts, addInstagramPost, updateInstagramPost, deleteInstagramPost, type InstagramPost } from '@/lib/siteConfig';
 import { ImageUpload } from '@/components/ImageUpload';
+
+interface InstagramPost {
+  id: string;
+  imageUrl: string;
+  caption: string;
+  link?: string;
+  likes: number;
+}
 
 export default function AdminInstagramPage() {
   const router = useRouter();
@@ -14,11 +21,10 @@ export default function AdminInstagramPage() {
   const [posts, setPosts] = useState<InstagramPost[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    image: '',
+    imageUrl: '',
     likes: 0,
-    comments: 0,
     caption: '',
-    postUrl: ''
+    link: ''
   });
 
   useEffect(() => {
@@ -27,59 +33,85 @@ export default function AdminInstagramPage() {
       return;
     }
     loadPosts();
-    setLoading(false);
   }, [router]);
 
-  const loadPosts = () => {
-    setPosts(getInstagramPosts());
+  const loadPosts = async () => {
+    try {
+      const response = await fetch('/api/instagram');
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setPosts(data);
+      }
+    } catch (error) {
+      console.error('Error loading Instagram posts:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (editingId) {
-      updateInstagramPost(editingId, formData);
-    } else {
-      addInstagramPost(formData);
-    }
+    try {
+      if (editingId) {
+        await fetch('/api/instagram', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: editingId, ...formData }),
+        });
+      } else {
+        await fetch('/api/instagram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+      }
 
-    setFormData({
-      image: '',
-      likes: 0,
-      comments: 0,
-      caption: '',
-      postUrl: ''
-    });
-    setEditingId(null);
-    loadPosts();
+      setFormData({
+        imageUrl: '',
+        likes: 0,
+        caption: '',
+        link: ''
+      });
+      setEditingId(null);
+      await loadPosts();
+    } catch (error) {
+      console.error('Error saving Instagram post:', error);
+      alert('Error al guardar el post');
+    }
   };
 
   const handleEdit = (post: InstagramPost) => {
     setEditingId(post.id);
     setFormData({
-      image: post.image,
+      imageUrl: post.imageUrl,
       likes: post.likes,
-      comments: post.comments,
       caption: post.caption,
-      postUrl: post.postUrl || ''
+      link: post.link || ''
     });
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('¿Estás seguro de eliminar este post?')) {
-      deleteInstagramPost(id);
-      loadPosts();
+      try {
+        await fetch(`/api/instagram?id=${id}`, {
+          method: 'DELETE',
+        });
+        await loadPosts();
+      } catch (error) {
+        console.error('Error deleting Instagram post:', error);
+        alert('Error al eliminar el post');
+      }
     }
   };
 
   const handleCancel = () => {
     setEditingId(null);
     setFormData({
-      image: '',
+      imageUrl: '',
       likes: 0,
-      comments: 0,
       caption: '',
-      postUrl: ''
+      link: ''
     });
   };
 
@@ -113,8 +145,8 @@ export default function AdminInstagramPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <ImageUpload
-              value={formData.image}
-              onChange={(url) => setFormData({ ...formData, image: url })}
+              value={formData.imageUrl}
+              onChange={(url) => setFormData({ ...formData, imageUrl: url })}
               folder="galeria"
               label="Imagen del Post"
             />
@@ -150,26 +182,12 @@ export default function AdminInstagramPage() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Comentarios
-                </label>
-                <input
-                  type="number"
-                  value={formData.comments}
-                  onChange={(e) => setFormData({ ...formData, comments: parseInt(e.target.value) || 0 })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  placeholder="12"
-                  min="0"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
                   URL del Post (opcional)
                 </label>
                 <input
                   type="url"
-                  value={formData.postUrl}
-                  onChange={(e) => setFormData({ ...formData, postUrl: e.target.value })}
+                  value={formData.link}
+                  onChange={(e) => setFormData({ ...formData, link: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   placeholder="https://instagram.com/p/..."
                 />
@@ -220,7 +238,7 @@ export default function AdminInstagramPage() {
                 <div key={post.id} className="bg-gray-50 rounded-lg overflow-hidden">
                   <div className="relative aspect-square">
                     <img
-                      src={post.image}
+                      src={post.imageUrl}
                       alt={post.caption}
                       className="w-full h-full object-cover"
                     />
@@ -229,7 +247,6 @@ export default function AdminInstagramPage() {
                     <p className="text-sm text-gray-700 mb-3 line-clamp-2">{post.caption}</p>
                     <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
                       <span>{post.likes} likes</span>
-                      <span>{post.comments} comentarios</span>
                     </div>
                     <div className="flex gap-2">
                       <button

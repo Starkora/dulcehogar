@@ -18,10 +18,6 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   ...generateSEOMetadata({}),
   title: 'Dulce Hogar',
-  icons: {
-    icon: '/icon.png',
-    apple: '/icon.png',
-  },
 };
 
 export default function RootLayout({
@@ -33,6 +29,10 @@ export default function RootLayout({
 
   return (
     <html lang="es">
+      <head>
+        <link rel="icon" href="/icono.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/icono.png" />
+      </head>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         <script
           type="application/ld+json"
