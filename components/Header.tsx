@@ -10,7 +10,11 @@ export function Header() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    setIsAdmin(isAuthenticated());
+    const checkAuth = async () => {
+      const authenticated = await isAuthenticated();
+      setIsAdmin(authenticated);
+    };
+    checkAuth();
   }, []);
 
   return (
