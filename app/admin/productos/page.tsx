@@ -71,7 +71,7 @@ export default function AdminProductos() {
         setCategories(uniqueCategories.sort());
       }
     } catch (error) {
-      console.error('Error loading products:', error);
+      
     } finally {
       setIsLoading(false);
     }
@@ -121,7 +121,7 @@ export default function AdminProductos() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } catch (error) {
-      console.error('Error saving product:', error);
+      
       alert('Error al guardar el producto');
     }
   };
@@ -157,7 +157,7 @@ export default function AdminProductos() {
       await loadProducts();
       setDeleteConfirmId(null);
     } catch (error) {
-      console.error('Error deleting product:', error);
+      
       alert('Error al eliminar el producto');
     }
   };

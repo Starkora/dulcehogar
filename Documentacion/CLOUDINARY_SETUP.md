@@ -5,11 +5,11 @@ Esta guía te explica cómo configurar Cloudinary para almacenar las imágenes d
 ## ¿Por qué Cloudinary?
 
 Cloudinary es ideal para sitios web en producción porque:
-- ✅ **CDN Global**: Imágenes rápidas en todo el mundo
-- ✅ **Optimización Automática**: Reduce el tamaño sin perder calidad
-- ✅ **Formato Automático**: Convierte a WebP cuando el navegador lo soporte
-- ✅ **Escalable**: No hay límites de almacenamiento del servidor
-- ✅ **Gratis para empezar**: 25 GB de almacenamiento y 25 GB de ancho de banda mensual
+- **CDN Global**: Imágenes rápidas en todo el mundo
+- **Optimización Automática**: Reduce el tamaño sin perder calidad
+- **Formato Automático**: Convierte a WebP cuando el navegador lo soporte
+- **Escalable**: No hay límites de almacenamiento del servidor
+- **Gratis para empezar**: 25 GB de almacenamiento y 25 GB de ancho de banda mensual
 
 ## Paso 1: Crear una Cuenta en Cloudinary
 

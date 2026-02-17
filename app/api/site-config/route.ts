@@ -26,7 +26,7 @@ export async function GET() {
     
     return NextResponse.json(configObject);
   } catch (error) {
-    console.error('Error fetching site config:', error);
+    
     return NextResponse.json({ error: 'Error al cargar configuración' }, { status: 500 });
   }
 }
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error updating site config:', error);
+    
     return NextResponse.json({ error: 'Error al actualizar configuración' }, { status: 500 });
   }
 }
@@ -75,7 +75,7 @@ export async function PUT(request: Request) {
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error updating config key:', error);
+    
     return NextResponse.json({ error: 'Error al actualizar configuración' }, { status: 500 });
   }
 }

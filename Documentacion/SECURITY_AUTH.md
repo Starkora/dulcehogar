@@ -1,15 +1,15 @@
 # Sistema de Autenticación Seguro para Admin
 
-## 📋 Cambios Realizados
+##  Cambios Realizados
 
-### ✅ Problema Resuelto
+### Problema Resuelto
 Antes, el sistema usaba `localStorage` para la autenticación, lo que significaba:
 - **Cualquier persona en el mismo navegador podía acceder al admin**
 - No había verificación del lado del servidor
 - La contraseña estaba en el código del cliente (inseguro)
 - Las APIs no verificaban autenticación
 
-### 🔐 Nueva Solución
+### ueva Solución
 
 Ahora el sistema usa **cookies HTTP-only** con verificación del servidor:
 
@@ -18,7 +18,7 @@ Ahora el sistema usa **cookies HTTP-only** con verificación del servidor:
 3. **Middleware**: Protege todas las rutas de admin automáticamente
 4. **Variables de entorno**: Contraseña almacenada de forma segura
 
-## 📁 Archivos Creados/Modificados
+##  Archivos Creados/Modificados
 
 ### Nuevos Archivos:
 - `middleware.ts` - Protege rutas de admin
@@ -37,7 +37,7 @@ ADMIN_PASSWORD=DulceHogar@2026VMT
 SESSION_SECRET=tu-secreto-aleatorio-seguro
 ```
 
-## 🚀 Cómo Usar
+##  Cómo Usar
 
 ### 1. Configurar Variables de Entorno
 
@@ -47,9 +47,9 @@ ADMIN_PASSWORD=DulceHogar@2026VMT
 SESSION_SECRET=48f7c3c5e8a2b4d6f1e9a7c3b2d4e6f8a1c3e5b7d9f1a3c5e7b9d1f3a5c7e9b1
 ```
 
-**⚠️ Para producción:** Genera un nuevo `SESSION_SECRET` ejecutando:
+** Para producción:** Genera un nuevo `SESSION_SECRET` ejecutando:
 ```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+node -e ".randomBytes(32).toString('hex'))"
 ```
 
 ### 2. Reiniciar el Servidor
@@ -64,17 +64,17 @@ npm run dev
 2. Ingresa la contraseña: `DulceHogar@2026VMT`
 3. Serás redirigido al panel de administración
 
-## 🔒 Seguridad
+##  Seguridad
 
 ### Características de Seguridad:
 
-✅ **Cookies HTTP-only**: No accesibles desde JavaScript
-✅ **Cookies SameSite=Strict**: Protección contra CSRF
-✅ **Cookies Secure en producción**: Solo HTTPS
-✅ **Expiración de sesión**: 24 horas
-✅ **Middleware de protección**: Rutas bloqueadas automáticamente
-✅ **Contraseña en variables de entorno**: No en el código
-✅ **Hash de sesión**: Tokens firmados con HMAC
+**Cookies HTTP-only**: No accesibles desde JavaScript
+**Cookies SameSite=Strict**: Protección contra CSRF
+**Cookies Secure en producción**: Solo HTTPS
+**Expiración de sesión**: 24 horas
+**Middleware de protección**: Rutas bloqueadas automáticamente
+**Contraseña en variables de entorno**: No en el código
+**Hash de sesión**: Tokens firmados con HMAC
 
 ### Protección de Rutas:
 
@@ -86,7 +86,7 @@ Si un usuario no está autenticado:
 - Rutas de página: Redirige a `/admin/login`
 - Rutas de API: Retorna error 401
 
-## 🔄 Flujo de Autenticación
+##  Flujo de Autenticación
 
 ```
 1. Usuario ingresa contraseña
@@ -105,7 +105,7 @@ Si un usuario no está autenticado:
    Si es inválida: Redirige a login
 ```
 
-## 🧪 Probar la Seguridad
+##  Probar la Seguridad
 
 ### Test 1: Sesiones Independientes
 1. Abre el sitio en Chrome
@@ -130,7 +130,7 @@ Si un usuario no está autenticado:
 3. Recarga la página
 4. **Resultado esperado**: Redirige a login
 
-## 📝 Cambiar la Contraseña
+##  Cambiar la Contraseña
 
 ### Opción 1: Variables de Entorno (Recomendado)
 Edita `.env.local`:
@@ -144,9 +144,9 @@ Edita `app/api/auth/login/route.ts` línea 4:
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'TuNuevaContraseña';
 ```
 
-**⚠️ Siempre usa variables de entorno en producción**
+** Siempre usa variables de entorno en producción**
 
-## 🌐 Despliegue en Producción
+##  Despliegue en Producción
 
 ### Vercel / Netlify / Otros:
 
@@ -160,7 +160,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'TuNuevaContraseña';
 
 3. **Las cookies `secure` se activarán automáticamente** en producción
 
-## 🆘 Solución de Problemas
+##  Solución de Problemas
 
 ### "No puedo iniciar sesión"
 - Verifica que `.env.local` existe y tiene `ADMIN_PASSWORD`
@@ -177,13 +177,13 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'TuNuevaContraseña';
 - Verifica que HTTPS esté habilitado
 - Revisa los logs del servidor
 
-## 📚 Recursos Adicionales
+##  Recursos Adicionales
 
 - [Next.js Middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware)
 - [HTTP-only Cookies](https://developer.mozilla.org/es/docs/Web/HTTP/Cookies)
 - [CSRF Protection](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
 
-## 🔮 Mejoras Futuras
+##  Mejoras Futuras
 
 Si necesitas un sistema más robusto:
 - **NextAuth.js**: Sistema completo de autenticación
@@ -194,4 +194,4 @@ Si necesitas un sistema más robusto:
 
 ---
 
-**✅ Sistema implementado y funcionando correctamente**
+**Sistema implementado y funcionando correctamente**

@@ -53,7 +53,7 @@ export default function AdminPromociones() {
         setPromotions(data);
       }
     } catch (error) {
-      console.error('Error loading promotions:', error);
+      
     } finally {
       setIsLoading(false);
     }
@@ -91,7 +91,7 @@ export default function AdminPromociones() {
       
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Error response:', errorData);
+        
         alert(`Error: ${errorData.error || 'No se pudo guardar la promoción'}`);
         return;
       }
@@ -101,7 +101,7 @@ export default function AdminPromociones() {
       setSuccessMessage(editingPromotion ? 'Promoción actualizada correctamente' : 'Promoción creada correctamente');
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
-      console.error('Error saving promotion:', error);
+      
       alert('Error al guardar la promoción: ' + error);
     }
   };
@@ -129,7 +129,7 @@ export default function AdminPromociones() {
       setSuccessMessage('Promoción eliminada correctamente');
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
-      console.error('Error deleting promotion:', error);
+      
       alert('Error al eliminar la promoción');
     }
   };
@@ -146,7 +146,7 @@ export default function AdminPromociones() {
         await loadPromotions();
       }
     } catch (error) {
-      console.error('Error toggling promotion:', error);
+      
     }
   };
 

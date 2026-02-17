@@ -45,7 +45,7 @@ export async function uploadToCloudinary(
       url: result.secure_url,
     };
   } catch (error) {
-    console.error('Error subiendo a Cloudinary:', error);
+    
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Error desconocido al subir imagen',
@@ -65,7 +65,7 @@ export async function deleteFromCloudinary(publicId: string): Promise<UploadResu
       success: true,
     };
   } catch (error) {
-    console.error('Error eliminando de Cloudinary:', error);
+    
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Error desconocido al eliminar imagen',

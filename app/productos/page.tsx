@@ -25,7 +25,7 @@ export default function ProductsPage() {
         ) as string[];
         setCategories(['Todos', ...uniqueCategories.sort()]);
       } catch (error) {
-        console.error('Error loading products:', error);
+        
       } finally {
         setLoading(false);
       }

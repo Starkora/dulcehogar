@@ -58,7 +58,7 @@ export default function AdminConfiguracion() {
         showInstagram: data.showInstagram ?? true
       });
     } catch (error) {
-      console.error('Error loading config:', error);
+      
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +89,7 @@ export default function AdminConfiguracion() {
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (error) {
-      console.error('Error saving config:', error);
+      
       alert('Error al guardar la configuración');
     }
   };

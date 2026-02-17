@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error al subir imagen:', error);
+    
     return NextResponse.json(
       { error: 'Error al subir la imagen' },
       { status: 500 }

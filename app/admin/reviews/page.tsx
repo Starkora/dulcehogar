@@ -48,7 +48,7 @@ export default function AdminReviews() {
       const approvedData = await approvedResponse.json();
       setApprovedReviews(Array.isArray(approvedData) ? approvedData : []);
     } catch (error) {
-      console.error('Error loading reviews:', error);
+      
     }
   };
 
@@ -64,7 +64,7 @@ export default function AdminReviews() {
         loadReviews();
       }
     } catch (error) {
-      console.error('Error approving review:', error);
+      
     }
   };
 
@@ -81,7 +81,7 @@ export default function AdminReviews() {
           loadReviews();
         }
       } catch (error) {
-        console.error('Error rejecting review:', error);
+        
       }
     }
   };
@@ -97,7 +97,7 @@ export default function AdminReviews() {
           loadReviews();
         }
       } catch (error) {
-        console.error('Error deleting review:', error);
+        
       }
     }
   };

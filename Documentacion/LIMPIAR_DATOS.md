@@ -15,11 +15,11 @@ location.reload()
 ```
 
 Esto eliminará:
-- ✅ Todos los productos
-- ✅ Todas las imágenes de la galería
-- ✅ Todas las promociones
-- ✅ Toda la configuración del sitio
-- ✅ La sesión de autenticación
+- Todos los productos
+- Todas las imágenes de la galería
+- Todas las promociones
+- Toda la configuración del sitio
+- La sesión de autenticación
 
 ## Opción 2: Desde las Herramientas de Desarrollador
 
@@ -67,7 +67,7 @@ location.reload()
 
 ## Nota Importante
 
-⚠️ **Al limpiar localStorage, perderás TODOS los datos**. Esto incluye productos, galería, promociones y configuraciones que hayas agregado desde el panel de administración.
+ **Al limpiar localStorage, perderás TODOS los datos**. Esto incluye productos, galería, promociones y configuraciones que hayas agregado desde el panel de administración.
 
 Para evitar pérdida de datos en el futuro, considera:
 1. Exportar los datos antes de limpiar

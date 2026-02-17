@@ -26,7 +26,7 @@ export async function GET() {
     
     return NextResponse.json(mapped);
   } catch (error) {
-    console.error('Error fetching promotions:', error);
+    
     return NextResponse.json({ error: 'Error al cargar promociones' }, { status: 500 });
   }
 }
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error creating promotion:', error);
+    
     return NextResponse.json({ error: 'Error al crear promoción' }, { status: 500 });
   }
 }
@@ -87,7 +87,7 @@ export async function PUT(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error updating promotion:', error);
+    
     return NextResponse.json({ error: 'Error al actualizar promoción' }, { status: 500 });
   }
 }
@@ -108,7 +108,7 @@ export async function DELETE(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error deleting promotion:', error);
+    
     return NextResponse.json({ error: 'Error al eliminar promoción' }, { status: 500 });
   }
 }

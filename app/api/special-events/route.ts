@@ -46,7 +46,7 @@ export async function GET(request: Request) {
     
     return NextResponse.json(activeOnly && events.length > 0 ? events[0] : events);
   } catch (error) {
-    console.error('Error fetching special events:', error);
+    
     return NextResponse.json({ error: 'Error al cargar eventos especiales' }, { status: 500 });
   }
 }
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error creating special event:', error);
+    
     return NextResponse.json({ error: 'Error al crear evento especial' }, { status: 500 });
   }
 }
@@ -144,7 +144,7 @@ export async function PUT(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error updating special event:', error);
+    
     return NextResponse.json({ error: 'Error al actualizar evento especial' }, { status: 500 });
   }
 }
@@ -166,7 +166,7 @@ export async function DELETE(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error deleting special event:', error);
+    
     return NextResponse.json({ error: 'Error al eliminar evento especial' }, { status: 500 });
   }
 }

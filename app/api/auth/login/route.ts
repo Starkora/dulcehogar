@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     return response;
 
   } catch (error) {
-    console.error('Error en login:', error);
+    
     return NextResponse.json(
       { error: 'Error en el servidor' },
       { status: 500 }

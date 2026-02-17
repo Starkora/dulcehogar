@@ -47,7 +47,7 @@ export default function AdminInstagramPage() {
         setPosts(data);
       }
     } catch (error) {
-      console.error('Error loading Instagram posts:', error);
+      
     } finally {
       setLoading(false);
     }
@@ -80,7 +80,7 @@ export default function AdminInstagramPage() {
       setEditingId(null);
       await loadPosts();
     } catch (error) {
-      console.error('Error saving Instagram post:', error);
+      
       alert('Error al guardar el post');
     }
   };
@@ -103,7 +103,7 @@ export default function AdminInstagramPage() {
         });
         await loadPosts();
       } catch (error) {
-        console.error('Error deleting Instagram post:', error);
+        
         alert('Error al eliminar el post');
       }
     }

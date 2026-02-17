@@ -25,7 +25,7 @@ export async function executeQuery<T = any>(
     }
     return (result.rows || []) as T[];
   } catch (error) {
-    console.error('Error ejecutando query:', error);
+    
     throw error;
   }
 }

@@ -29,7 +29,7 @@ export default function AdminLogin() {
       }
     } catch (err) {
       setError('Error al iniciar sesión. Intenta nuevamente.');
-      console.error(err);
+      
     } finally {
       setLoading(false);
     }

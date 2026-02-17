@@ -159,7 +159,7 @@ Edita `app/admin/reviews/page.tsx`:
 const ADMIN_PASSWORD = 'tu_nueva_contraseña';
 ```
 
-**⚠️ IMPORTANTE:** Esto es solo para desarrollo. En producción usa autenticación real.
+** IMPORTANTE:** Esto es solo para desarrollo. En producción usa autenticación real.
 
 ## Métricas y Estadísticas
 

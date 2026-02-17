@@ -26,7 +26,7 @@ export function ProductCarousel() {
         const data = await response.json();
         setProducts(data.slice(0, 6)); // Solo mostrar 6 productos
       } catch (error) {
-        console.error('Error loading products:', error);
+        
       } finally {
         setLoading(false);
       }

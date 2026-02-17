@@ -18,7 +18,7 @@ export async function GET() {
     
     return NextResponse.json(posts);
   } catch (error) {
-    console.error('Error fetching Instagram posts:', error);
+    
     return NextResponse.json({ error: 'Error al cargar posts de Instagram' }, { status: 500 });
   }
 }
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error creating Instagram post:', error);
+    
     return NextResponse.json({ error: 'Error al crear post de Instagram' }, { status: 500 });
   }
 }
@@ -69,7 +69,7 @@ export async function PUT(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error updating Instagram post:', error);
+    
     return NextResponse.json({ error: 'Error al actualizar post de Instagram' }, { status: 500 });
   }
 }
@@ -90,7 +90,7 @@ export async function DELETE(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error deleting Instagram post:', error);
+    
     return NextResponse.json({ error: 'Error al eliminar post de Instagram' }, { status: 500 });
   }
 }

@@ -9,7 +9,7 @@ export async function GET() {
     
     return NextResponse.json(products);
   } catch (error) {
-    console.error('Error fetching products:', error);
+    
     return NextResponse.json({ error: 'Error al cargar productos' }, { status: 500 });
   }
 }
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error creating product:', error);
+    
     return NextResponse.json({ error: 'Error al crear producto' }, { status: 500 });
   }
 }
@@ -72,7 +72,7 @@ export async function PUT(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error updating product:', error);
+    
     return NextResponse.json({ error: 'Error al actualizar producto' }, { status: 500 });
   }
 }
@@ -93,7 +93,7 @@ export async function DELETE(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error deleting product:', error);
+    
     return NextResponse.json({ error: 'Error al eliminar producto' }, { status: 500 });
   }
 }

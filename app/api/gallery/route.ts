@@ -17,7 +17,7 @@ export async function GET() {
     
     return NextResponse.json(images);
   } catch (error) {
-    console.error('Error fetching gallery images:', error);
+    
     return NextResponse.json({ error: 'Error al cargar imágenes' }, { status: 500 });
   }
 }
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error creating gallery image:', error);
+    
     return NextResponse.json({ error: 'Error al crear imagen' }, { status: 500 });
   }
 }
@@ -60,7 +60,7 @@ export async function DELETE(request: Request) {
     
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Error deleting gallery image:', error);
+    
     return NextResponse.json({ error: 'Error al eliminar imagen' }, { status: 500 });
   }
 }

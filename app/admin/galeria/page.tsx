@@ -44,7 +44,7 @@ export default function AdminGaleria() {
         setImages(data);
       }
     } catch (error) {
-      console.error('Error loading images:', error);
+      
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +72,7 @@ export default function AdminGaleria() {
       await loadImages();
       setFormData({ url: '', title: '', category: 'Todas' });
     } catch (error) {
-      console.error('Error adding image:', error);
+      
       alert('Error al agregar imagen');
     }
   };
@@ -85,7 +85,7 @@ export default function AdminGaleria() {
         });
         await loadImages();
       } catch (error) {
-        console.error('Error deleting image:', error);
+        
         alert('Error al eliminar imagen');
       }
     }

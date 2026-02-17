@@ -13,11 +13,11 @@ Esta funcionalidad está disponible en:
 ## Almacenamiento en Cloudinary
 
 Las imágenes subidas se guardan en **Cloudinary**, un servicio de almacenamiento en la nube que ofrece:
-- ✅ CDN global para carga rápida
-- ✅ Optimización automática de imágenes
-- ✅ Conversión a WebP cuando el navegador lo soporte
-- ✅ Sin límites de almacenamiento del servidor
-- ✅ Perfecto para producción
+- CDN global para carga rápida
+- Optimización automática de imágenes
+- Conversión a WebP cuando el navegador lo soporte
+- Sin límites de almacenamiento del servidor
+- Perfecto para producción
 
 **Ver la guía completa**: [CLOUDINARY_SETUP.md](./CLOUDINARY_SETUP.md)
 
@@ -84,7 +84,7 @@ Depende de dónde esté alojada la imagen:
 
 Después de subir una imagen o ingresar una URL:
 - Verás una vista previa de la imagen
-- Puedes hacer clic en "Eliminar" (🗑️) para borrar la imagen y seleccionar otra
+- Puedes hacer clic en "Eliminar" para borrar la imagen y seleccionar otra
 - El botón para cambiar entre "Subir archivo" y "Ingresar URL" está siempre disponible
 
 ## Configuración Requerida
@@ -130,11 +130,11 @@ Para que las subidas funcionen, necesitas configurar Cloudinary:
 
 ### Almacenamiento Actual
 El sistema usa **Cloudinary** como almacenamiento principal:
-- ✅ **Listo para producción**: Funciona en Vercel, Netlify, etc.
-- ✅ **Sin límites de servidor**: No usa el sistema de archivos
-- ✅ **CDN incluido**: Carga rápida globalmente
-- ✅ **Optimización automática**: WebP, compresión inteligente
-- ✅ **Plan gratuito generoso**: 25GB almacenamiento + 25GB bandwidth
+- **Listo para producción**: Funciona en Vercel, Netlify, etc.
+- **Sin límites de servidor**: No usa el sistema de archivos
+- **CDN incluido**: Carga rápida globalmente
+- **Optimización automática**: WebP, compresión inteligente
+- **Plan gratuito generoso**: 25GB almacenamiento + 25GB bandwidth
 
 ### Plan Gratuito de Cloudinary
 Incluye:

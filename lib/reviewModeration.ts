@@ -169,7 +169,7 @@ function saveReviewsToStorage(reviews: Review[]): void {
   try {
     localStorage.setItem('dulcehogar-all-reviews', JSON.stringify(reviews));
   } catch (error) {
-    console.error('Error saving reviews:', error);
+    
   }
 }
 

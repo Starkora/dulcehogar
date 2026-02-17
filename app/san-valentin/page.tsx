@@ -23,7 +23,7 @@ export default function SanValentinPage() {
         const data = await response.json();
         setProducts(data);
       } catch (error) {
-        console.error('Error loading products:', error);
+        
       }
     };
 
@@ -34,7 +34,7 @@ export default function SanValentinPage() {
         const data = await response.json();
         setEventProducts(data);
       } catch (error) {
-        console.error('Error loading event products:', error);
+        
       } finally {
         setLoading(false);
       }

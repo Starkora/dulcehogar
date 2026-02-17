@@ -11,7 +11,7 @@ export const login = async (password: string): Promise<boolean> => {
 
     return response.ok;
   } catch (error) {
-    console.error('Error en login:', error);
+    
     return false;
   }
 };
@@ -23,7 +23,7 @@ export const logout = async () => {
       window.location.href = '/admin/login';
     }
   } catch (error) {
-    console.error('Error en logout:', error);
+    
   }
 };
 

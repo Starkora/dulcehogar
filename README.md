@@ -142,13 +142,13 @@ El panel incluye un sistema flexible para gestionar imágenes con almacenamiento
 2. **Ingresar URL**: Usa URLs de Cloudinary existentes o imágenes externas
 
 **Características:**
-- ✅ **Almacenamiento en la nube**: Cloudinary CDN global
-- ✅ **Optimización automática**: Compresión inteligente y conversión a WebP
-- ✅ **Listo para producción**: Funciona en Vercel, Netlify, etc.
-- ✅ Formatos soportados: JPEG, PNG, GIF, WEBP
-- ✅ Tamaño máximo: 5MB por imagen
-- ✅ Vista previa antes de guardar
-- ✅ Plan gratuito generoso: 25GB almacenamiento + 25GB bandwidth/mes
+- **Almacenamiento en la nube**: Cloudinary CDN global
+- **Optimización automática**: Compresión inteligente y conversión a WebP
+- **Listo para producción**: Funciona en Vercel, Netlify, etc.
+- Formatos soportados: JPEG, PNG, GIF, WEBP
+- Tamaño máximo: 5MB por imagen
+- Vista previa antes de guardar
+- Plan gratuito generoso: 25GB almacenamiento + 25GB bandwidth/mes
 
 **Configuración Requerida:**
 1. Crear cuenta gratuita en [Cloudinary](https://cloudinary.com/users/register/free)

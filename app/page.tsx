@@ -47,11 +47,11 @@ export default function Home() {
       if (Array.isArray(data)) {
         setTestimonials(data);
       } else {
-        console.error('Invalid reviews data:', data);
+        
         setTestimonials([]);
       }
     } catch (error) {
-      console.error('Error loading reviews:', error);
+      
       setTestimonials([]);
     }
   };
@@ -65,7 +65,7 @@ export default function Home() {
         urgencyBanner: data.urgencyBanner || { show: false }
       });
     } catch (error) {
-      console.error('Error loading site config:', error);
+      
     }
   };
 
@@ -76,7 +76,7 @@ export default function Home() {
       const actives = data.filter((p: any) => p.isActive);
       setActivePromotionsFromDB(actives);
     } catch (error) {
-      console.error('Error loading promotions:', error);
+      
     }
   };
 
